@@ -5,6 +5,10 @@
       <map>
         <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/layout/activity_main.xml" value="0.35052083333333334" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/layout/content_main.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/layout/fragment_favorite_recipes.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/layout/fragment_food_joke.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/layout/fragment_recipes.xml" value="0.35052083333333334" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.262109375" />
       </map>
     </option>
   </component>
