@@ -27,6 +27,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ScrollView
+        android:id="@+id/recipesLoadingSv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include layout="@layout/item_recipe_shimmer" />
+
+            <include layout="@layout/item_recipe_shimmer" />
+
+            <include layout="@layout/item_recipe_shimmer" />
+
+            <include layout="@layout/item_recipe_shimmer" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/contentRecipesGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="fab, recipesRv" />
+
     <include
         android:id="@+id/errorConnectionView"
         layout="@layout/view_internet_connection_error"
