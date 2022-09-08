@@ -10,7 +10,7 @@ data class RecipeResponse(
     @SerializedName("dairyFree")
     val dairyFree: Boolean,
     @SerializedName("extendedIngredients")
-    val extendedIngredients: List<ExtendedIngredient>,
+    val extendedIngredients: List<ExtendedIngredientResponse>,
     @SerializedName("glutenFree")
     val glutenFree: Boolean,
     @SerializedName("id")
