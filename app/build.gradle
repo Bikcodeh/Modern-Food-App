@@ -20,8 +20,14 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "FOOD_KEY", '"' + getProps("FOOD_KEY") + '"'
+            buildConfigField "String", "BASE_URL", '"' + getProps("BASE_URL") + '"'
+        }
         release {
             minifyEnabled false
+            buildConfigField "String", "FOOD_KEY", '"' + getProps("FOOD_KEY") + '"'
+            buildConfigField "String", "BASE_URL", '"' + getProps("BASE_URL") + '"'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
