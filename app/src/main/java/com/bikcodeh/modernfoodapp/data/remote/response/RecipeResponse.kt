@@ -1,5 +1,6 @@
 package com.bikcodeh.modernfoodapp.data.remote.response
 
+import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.google.gson.annotations.SerializedName
 
 data class RecipeResponse(
@@ -33,4 +34,22 @@ data class RecipeResponse(
     val vegetarian: Boolean,
     @SerializedName("veryHealthy")
     val veryHealthy: Boolean
-)
+) {
+    fun toDomain(): Recipe = Recipe(
+        aggregateLikes,
+        cheap,
+        dairyFree,
+        extendedIngredients.map { it.toDomain() },
+        glutenFree,
+        id,
+        image,
+        readyInMinutes,
+        sourceName,
+        sourceUrl,
+        summary,
+        title,
+        vegan,
+        vegetarian,
+        veryHealthy
+    )
+}
