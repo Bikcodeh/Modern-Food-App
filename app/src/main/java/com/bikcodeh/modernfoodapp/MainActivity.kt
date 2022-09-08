@@ -1,17 +1,30 @@
 package com.bikcodeh.modernfoodapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bikcodeh.modernfoodapp.databinding.ActivityMainBinding
+import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
+import com.bikcodeh.modernfoodapp.util.NetworkConnectivityObserverImpl
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+
+    @Inject
+    lateinit var connectivityObserver: ConnectivityObserver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -23,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
         navController = navHostFragment.navController
         setUpBottomNavigation()
+        setUpCollectors()
     }
 
     private fun setUpBottomNavigation() {
@@ -31,5 +45,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    private fun setUpCollectors() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                connectivityObserver.observe().collect {
+                    when(it) {
+                        ConnectivityObserver.Status.Available -> message("available")
+                        ConnectivityObserver.Status.Unavailable -> message("no connection")
+                        ConnectivityObserver.Status.Losing -> message("losing")
+                        ConnectivityObserver.Status.Lost -> message("lost")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun message(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

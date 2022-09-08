@@ -1,10 +1,14 @@
 package com.bikcodeh.modernfoodapp.di
 
+import android.content.Context
 import com.bikcodeh.modernfoodapp.BuildConfig
 import com.bikcodeh.modernfoodapp.data.remote.api.FoodRecipeApi
+import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
+import com.bikcodeh.modernfoodapp.util.NetworkConnectivityObserverImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -49,6 +53,11 @@ object NetworkModule {
 
     @Provides
     fun providesFoodRecipeService(retrofit: Retrofit): FoodRecipeApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesNetworkConnectivityObserver(@ApplicationContext context: Context): ConnectivityObserver =
+        NetworkConnectivityObserverImpl(context)
 }
 
 private const val CONNECT_TIMEOUT = 15L
