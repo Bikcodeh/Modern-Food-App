@@ -70,14 +70,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="@id/itemRecipeCaloriesTv"
-                app:layout_constraintStart_toStartOf="@id/itemRecipeCaloriesTv"
+                app:layout_constraintEnd_toEndOf="@id/itemRecipeLikesTv"
+                app:layout_constraintStart_toStartOf="@id/itemRecipeLikesTv"
                 app:layout_constraintTop_toBottomOf="@id/itemRecipeDescriptionTv"
                 app:srcCompat="@drawable/ic_heart"
                 app:tint="@color/red" />
 
             <TextView
-                android:id="@+id/itemRecipeCaloriesTv"
+                android:id="@+id/itemRecipeLikesTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -108,7 +108,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/yellow"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/itemRecipeCaloriesTv"
+                app:layout_constraintStart_toEndOf="@id/itemRecipeLikesTv"
                 app:layout_constraintTop_toBottomOf="@id/itemRecipeTimeIv"
                 tools:text="100" />
 
@@ -121,8 +121,7 @@
                 app:layout_constraintEnd_toEndOf="@id/itemRecipeVeganTv"
                 app:layout_constraintStart_toStartOf="@id/itemRecipeVeganTv"
                 app:layout_constraintTop_toBottomOf="@id/itemRecipeDescriptionTv"
-                app:srcCompat="@drawable/ic_eco"
-                app:tint="@color/green" />
+                app:srcCompat="@drawable/ic_eco" />
 
             <TextView
                 android:id="@+id/itemRecipeVeganTv"
@@ -131,7 +130,6 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginBottom="16dp"
                 android:textAlignment="center"
-                android:textColor="@color/green"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/itemRecipeTimeTv"
                 app:layout_constraintTop_toBottomOf="@id/itemRecipeTimeIv"
