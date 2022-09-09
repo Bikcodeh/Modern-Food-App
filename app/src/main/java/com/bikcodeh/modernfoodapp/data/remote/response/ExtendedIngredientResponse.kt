@@ -18,6 +18,6 @@ data class ExtendedIngredientResponse(
     val unit: String
 ) {
     fun toDomain(): ExtendedIngredient = ExtendedIngredient(
-        amount, consistency, image, name, original, unit
+        amount, consistency, image ?: "", name, original, unit
     )
 }

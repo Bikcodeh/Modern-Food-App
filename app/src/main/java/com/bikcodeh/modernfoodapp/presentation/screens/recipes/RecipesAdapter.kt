@@ -1,5 +1,6 @@
 package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
+import android.text.Html
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import com.bikcodeh.modernfoodapp.R
@@ -7,6 +8,7 @@ import com.bikcodeh.modernfoodapp.databinding.ItemRecipeBinding
 import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.bikcodeh.modernfoodapp.presentation.util.BaseAdapter
 import com.bikcodeh.modernfoodapp.presentation.util.BaseViewHolder
+import com.bikcodeh.modernfoodapp.util.extension.loadImageFromUrl
 import com.bikcodeh.modernfoodapp.util.extension.viewBinding
 
 class RecipesAdapter : BaseAdapter<Recipe, ItemRecipeBinding, RecipesAdapter.RecipesViewHolder>(
@@ -25,9 +27,10 @@ class RecipesAdapter : BaseAdapter<Recipe, ItemRecipeBinding, RecipesAdapter.Rec
         override fun bind(item: Recipe) {
             with(binding) {
                 itemRecipeTv.text = item.title
-                itemRecipeDescriptionTv.text = item.summary
+                itemRecipeDescriptionTv.text = Html.fromHtml(item.summary).toString()
                 itemRecipeLikesTv.text = item.aggregateLikes.toString()
                 itemRecipeTimeTv.text = item.readyInMinutes.toString()
+                itemRecipeIv.loadImageFromUrl(item.image)
                 if (item.vegan) {
                     itemRecipeVeganTv.setTextColor(
                         ContextCompat.getColor(

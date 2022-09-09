@@ -30,6 +30,7 @@ object NetworkModule {
             readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
             retryOnConnectionFailure(true)
+            addInterceptor(loggingInterceptorProvider())
         }.build()
 
     private fun loggingInterceptorProvider(): HttpLoggingInterceptor {

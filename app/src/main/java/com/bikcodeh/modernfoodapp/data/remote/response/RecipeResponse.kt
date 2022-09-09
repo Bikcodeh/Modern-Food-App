@@ -21,7 +21,7 @@ data class RecipeResponse(
     @SerializedName("readyInMinutes")
     val readyInMinutes: Int,
     @SerializedName("sourceName")
-    val sourceName: String,
+    val sourceName: String? = "",
     @SerializedName("sourceUrl")
     val sourceUrl: String,
     @SerializedName("summary")
@@ -44,7 +44,7 @@ data class RecipeResponse(
         id,
         image,
         readyInMinutes,
-        sourceName,
+        sourceName ?: "",
         sourceUrl,
         summary,
         title,

@@ -1,5 +1,6 @@
 package com.bikcodeh.modernfoodapp.data.remote
 
+import com.bikcodeh.modernfoodapp.BuildConfig
 import com.bikcodeh.modernfoodapp.data.remote.api.FoodRecipeApi
 import com.bikcodeh.modernfoodapp.domain.common.Result
 import com.bikcodeh.modernfoodapp.domain.common.fold
@@ -11,7 +12,15 @@ class RemoteDataSource @Inject constructor(
     private val foodRecipeApi: FoodRecipeApi
 ) {
 
-    suspend fun getRecipes(queries: Map<String, String>): Result<List<Recipe>> {
+    suspend fun getRecipes(): Result<List<Recipe>> {
+        val queries = HashMap<String, String>()
+        queries["number"] = "50"
+        queries["apiKey"] = BuildConfig.FOOD_KEY
+        queries["type"] = "snack"
+        queries["diet"] = "vegan"
+        queries["addRecipeInformation"] = "true"
+        queries["fillIngredients"] = "true"
+
         val result = makeSafeRequest { foodRecipeApi.getRecipes(queries) }
 
         return result.fold(
