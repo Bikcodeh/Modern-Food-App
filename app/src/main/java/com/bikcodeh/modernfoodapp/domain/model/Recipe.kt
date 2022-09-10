@@ -1,5 +1,7 @@
 package com.bikcodeh.modernfoodapp.domain.model
 
+import com.bikcodeh.modernfoodapp.data.local.entity.RecipeEntity
+
 data class Recipe(
     val aggregateLikes: Int,
     val cheap: Boolean,
@@ -16,4 +18,22 @@ data class Recipe(
     val vegan: Boolean,
     val vegetarian: Boolean,
     val veryHealthy: Boolean
-)
+) {
+    fun toEntity(): RecipeEntity = RecipeEntity(
+        id,
+        aggregateLikes,
+        cheap,
+        dairyFree,
+        extendedIngredients,
+        glutenFree,
+        image,
+        readyInMinutes,
+        sourceName,
+        sourceUrl,
+        summary,
+        title,
+        vegan,
+        vegetarian,
+        veryHealthy
+    )
+}

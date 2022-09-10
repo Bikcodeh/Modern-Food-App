@@ -22,7 +22,6 @@ class RecipesFragment :
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpCollectors()
-        recipesViewModel.getRecipes()
     }
 
     private fun setUpViews() {
@@ -41,17 +40,20 @@ class RecipesFragment :
                         binding.recipesLoadingSv.hide()
                     }
 
-                    state.data?.let {
-                    recipesAdapter.submitList(it)
-                    binding.contentRecipesGroup.show()
-                        if (it.isEmpty()) {
-
-                        } else {
-
-                        }
-                    } ?: run {
+                    if (state.hasError) {
                         binding.contentRecipesGroup.hide()
+                        binding.errorConnectionView.root.show()
+                    } else {
+                        binding.errorConnectionView.root.hide()
                     }
+                }
+            }
+
+            recipesViewModel.recipes.collect {
+                recipesAdapter.submitList(it)
+                binding.contentRecipesGroup.show()
+                if (it.isEmpty()) {
+                    recipesViewModel.getRecipes()
                 }
             }
         }

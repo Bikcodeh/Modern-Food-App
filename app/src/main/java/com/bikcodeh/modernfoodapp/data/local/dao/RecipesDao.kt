@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface RecipesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipes(recipes: RecipeEntity)
+    suspend fun insertRecipes(recipes: List<RecipeEntity>)
 
     @Query("SELECT * FROM recipes ORDER BY id ASC")
     fun getRecipes(): Flow<List<RecipeEntity>>
