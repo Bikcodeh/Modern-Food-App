@@ -2,6 +2,7 @@ package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -9,11 +10,13 @@ import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
 import com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersViewModel
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
+import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
 import com.bikcodeh.modernfoodapp.util.extension.hide
 import com.bikcodeh.modernfoodapp.util.extension.observeFlows
 import com.bikcodeh.modernfoodapp.util.extension.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipesFragment :
@@ -22,6 +25,9 @@ class RecipesFragment :
     private val recipesViewModel by viewModels<RecipesViewModel>()
     private val filtersViewModel by activityViewModels<FiltersViewModel>()
     private val recipesAdapter by lazy { RecipesAdapter() }
+
+    @Inject
+    lateinit var connectivityObserver: ConnectivityObserver
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,13 +80,38 @@ class RecipesFragment :
                     }
                 }
             }
+
+            coroutineScope.launch {
+                connectivityObserver.observe().collect {
+                    when (it) {
+                        ConnectivityObserver.Status.Available -> recipesViewModel.setNavigateToFilter(
+                            true
+                        )
+                        ConnectivityObserver.Status.Unavailable -> recipesViewModel.setNavigateToFilter(
+                            false
+                        )
+                        ConnectivityObserver.Status.Losing -> {}
+                        ConnectivityObserver.Status.Lost -> recipesViewModel.setNavigateToFilter(
+                            false
+                        )
+                    }
+                }
+            }
         }
 
     }
 
     private fun setUpListeners() {
         binding.recipesFab.setOnClickListener {
-            findNavController().navigate(R.id.action_recipesFragment_to_filtersBottomSheetFragment)
+            if (recipesViewModel.canNavigateToFilter) {
+                findNavController().navigate(R.id.action_recipesFragment_to_filtersBottomSheetFragment)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    R.string.no_internet_connection,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 }

@@ -22,6 +22,9 @@ class RecipesViewModel @Inject constructor(
     private val localDataSource: LocalDataSource
 ) : ViewModel() {
 
+    var canNavigateToFilter: Boolean = true
+        private set
+
     private val _recipesState: MutableStateFlow<RecipesState> = MutableStateFlow(RecipesState())
     val recipesState: StateFlow<RecipesState>
         get() = _recipesState.asStateFlow()
@@ -47,4 +50,7 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
+    fun setNavigateToFilter(canNavigate: Boolean) {
+        canNavigateToFilter = canNavigate
+    }
 }
