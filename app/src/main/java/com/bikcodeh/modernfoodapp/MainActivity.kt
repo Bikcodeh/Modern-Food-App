@@ -13,6 +13,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.bikcodeh.modernfoodapp.databinding.ActivityMainBinding
 import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
 import com.bikcodeh.modernfoodapp.util.NetworkConnectivityObserverImpl
+import com.bikcodeh.modernfoodapp.util.extension.hide
+import com.bikcodeh.modernfoodapp.util.extension.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,17 +54,13 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 connectivityObserver.observe().collect {
                     when(it) {
-                        ConnectivityObserver.Status.Available -> message("available")
-                        ConnectivityObserver.Status.Unavailable -> message("no connection")
-                        ConnectivityObserver.Status.Losing -> message("losing")
-                        ConnectivityObserver.Status.Lost -> message("lost")
+                        ConnectivityObserver.Status.Available -> binding.noConnectionTv.hide()
+                        ConnectivityObserver.Status.Unavailable -> binding.noConnectionTv.show()
+                        ConnectivityObserver.Status.Losing -> {}
+                        ConnectivityObserver.Status.Lost -> binding.noConnectionTv.show()
                     }
                 }
             }
         }
-    }
-
-    private fun message(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
