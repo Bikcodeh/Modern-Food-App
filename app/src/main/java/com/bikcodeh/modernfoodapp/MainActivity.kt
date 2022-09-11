@@ -1,7 +1,6 @@
 package com.bikcodeh.modernfoodapp
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
@@ -12,7 +11,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.bikcodeh.modernfoodapp.databinding.ActivityMainBinding
 import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
-import com.bikcodeh.modernfoodapp.util.NetworkConnectivityObserverImpl
 import com.bikcodeh.modernfoodapp.util.extension.hide
 import com.bikcodeh.modernfoodapp.util.extension.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 connectivityObserver.observe().collect {
-                    when(it) {
+                    when (it) {
                         ConnectivityObserver.Status.Available -> binding.noConnectionTv.hide()
                         ConnectivityObserver.Status.Unavailable -> binding.noConnectionTv.show()
                         ConnectivityObserver.Status.Losing -> {}
