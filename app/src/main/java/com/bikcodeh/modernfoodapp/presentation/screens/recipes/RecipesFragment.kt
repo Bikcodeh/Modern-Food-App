@@ -5,7 +5,6 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
 import com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersViewModel

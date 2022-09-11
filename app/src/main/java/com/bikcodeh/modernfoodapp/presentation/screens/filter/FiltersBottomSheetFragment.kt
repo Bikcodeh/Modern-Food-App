@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.HorizontalScrollView
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bikcodeh.modernfoodapp.databinding.FragmentFiltersBottomSheetBinding
 import com.bikcodeh.modernfoodapp.util.Constants.DEFAULT_DIET_TYPE
@@ -61,8 +61,16 @@ class FiltersBottomSheetFragment : BottomSheetDialogFragment() {
                     mealTypeChipId = it.selectedMealTypeId
                     dietTypeChip = it.selectedDietType
                     dietTypeChipId = it.selectedDietTypeId
-                    updateChip(it.selectedMealTypeId, binding.mealTypeChipGroup)
-                    updateChip(it.selectedDietTypeId, binding.dietTypeChipGroup)
+                    updateChip(
+                        it.selectedMealTypeId,
+                        binding.mealTypeChipGroup,
+                        binding.mealTypeScrollView
+                    )
+                    updateChip(
+                        it.selectedDietTypeId,
+                        binding.dietTypeChipGroup,
+                        binding.dietTypeScrollView
+                    )
                 }
             }
         }
@@ -101,13 +109,19 @@ class FiltersBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
-    private fun updateChip(chipId: Int, chipGroup: ChipGroup) {
+    private fun updateChip(chipId: Int, chipGroup: ChipGroup, scroll: HorizontalScrollView) {
         if (chipId != 0) {
             try {
                 chipGroup.findViewById<Chip>(chipId).isChecked = true
+                setScrollPosition(chipId, chipGroup, scroll)
             } catch (e: Exception) {
                 Timber.e("RecipesBottomSheet", e.message.toString())
             }
         }
+    }
+
+    private fun setScrollPosition(chipId: Int, chipGroup: ChipGroup, scroll: HorizontalScrollView) {
+        val chip = chipGroup.findViewById<Chip>(chipId)
+        scroll.scrollTo(chip.left, chip.right)
     }
 }
