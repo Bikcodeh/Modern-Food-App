@@ -3,6 +3,8 @@ package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
 import com.bikcodeh.modernfoodapp.util.extension.hide
@@ -21,6 +23,7 @@ class RecipesFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
+        setUpListeners()
         setUpCollectors()
     }
 
@@ -56,6 +59,12 @@ class RecipesFragment :
                     recipesViewModel.getRecipes()
                 }
             }
+        }
+    }
+
+    private fun setUpListeners() {
+        binding.recipesFab.setOnClickListener {
+            findNavController().navigate(R.id.action_recipesFragment_to_filtersBottomSheetFragment)
         }
     }
 }

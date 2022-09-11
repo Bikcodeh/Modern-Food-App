@@ -9,7 +9,11 @@
         android:id="@+id/recipesFragment"
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.recipes.RecipesFragment"
         android:label="fragment_recipes"
-        tools:layout="@layout/fragment_recipes" />
+        tools:layout="@layout/fragment_recipes" >
+        <action
+            android:id="@+id/action_recipesFragment_to_filtersBottomSheetFragment"
+            app:destination="@id/filtersBottomSheetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteRecipesFragment"
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.favoriterecipes.FavoriteRecipesFragment"
@@ -20,4 +24,13 @@
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.foodjoke.FoodJokeFragment"
         android:label="fragment_food_joke"
         tools:layout="@layout/fragment_food_joke" />
+    <dialog
+        android:id="@+id/filtersBottomSheetFragment"
+        android:name="com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersBottomSheetFragment"
+        android:label="fragment_filters_bottom_sheet"
+        tools:layout="@layout/fragment_filters_bottom_sheet" >
+        <action
+            android:id="@+id/action_filtersBottomSheetFragment_to_recipesFragment"
+            app:destination="@id/recipesFragment" />
+    </dialog>
 </navigation>

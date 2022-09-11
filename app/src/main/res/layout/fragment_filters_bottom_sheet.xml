@@ -247,6 +247,7 @@
 
     <Button
         android:id="@+id/apply_btn"
+        style="@style/Widget.Material3.Button.UnelevatedButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_marginStart="24dp"
