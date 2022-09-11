@@ -14,7 +14,7 @@ class FoodRepositoryImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource
 ) : FoodRepository {
 
-    override suspend fun getRecipes(): Result<List<Recipe>> {
-        return remoteDataSource.getRecipes(DEFAULT_MEAL_TYPE, DEFAULT_DIET_TYPE)
+    override suspend fun getRecipes(queries: Map<String, String>): Result<List<Recipe>> {
+        return remoteDataSource.getRecipes(queries)
     }
 }

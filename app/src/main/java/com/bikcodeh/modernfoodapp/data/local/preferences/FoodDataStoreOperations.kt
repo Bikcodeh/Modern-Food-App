@@ -11,7 +11,6 @@ import com.bikcodeh.modernfoodapp.util.Constants.PREFERENCES_DIET_TYPE_ID
 import com.bikcodeh.modernfoodapp.util.Constants.PREFERENCES_MEAL_TYPE
 import com.bikcodeh.modernfoodapp.util.Constants.PREFERENCES_MEAL_TYPE_ID
 import com.bikcodeh.modernfoodapp.util.Constants.PREFERENCES_NAME
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -20,7 +19,7 @@ import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
 
-class FoodDataStoreOperations @Inject constructor(@ApplicationContext context: Context) {
+class FoodDataStoreOperations @Inject constructor(context: Context) {
 
     private val dataStore = context.dataStore
 

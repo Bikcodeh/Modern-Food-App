@@ -7,7 +7,7 @@
     tools:context=".presentation.screens.recipes.RecipesFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/recipes_fab"
+        android:id="@+id/recipesFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -33,7 +33,8 @@
     <ScrollView
         android:id="@+id/recipesLoadingSv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/white">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/recipesShimmer"
@@ -66,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="fab, recipesRv" />
+        app:constraint_referenced_ids="recipesFab, recipesRv" />
 
     <include
         android:id="@+id/errorConnectionView"

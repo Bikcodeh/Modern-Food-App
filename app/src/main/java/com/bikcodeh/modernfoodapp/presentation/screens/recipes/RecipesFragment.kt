@@ -2,10 +2,13 @@ package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
+import com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersViewModel
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
 import com.bikcodeh.modernfoodapp.util.extension.hide
 import com.bikcodeh.modernfoodapp.util.extension.observeFlows
@@ -18,6 +21,7 @@ class RecipesFragment :
     BaseFragmentBinding<FragmentRecipesBinding>(FragmentRecipesBinding::inflate) {
 
     private val recipesViewModel by viewModels<RecipesViewModel>()
+    private val filtersViewModel by activityViewModels<FiltersViewModel>()
     private val recipesAdapter by lazy { RecipesAdapter() }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,6 +42,7 @@ class RecipesFragment :
             coroutineScope.launch {
                 recipesViewModel.recipesState.collect { state ->
                     if (state.isLoading) {
+                        binding.contentRecipesGroup.hide()
                         binding.recipesLoadingSv.show()
                     } else {
                         binding.recipesLoadingSv.hide()
@@ -52,14 +57,26 @@ class RecipesFragment :
                 }
             }
 
-            recipesViewModel.recipes.collect {
-                recipesAdapter.submitList(it)
-                binding.contentRecipesGroup.show()
-                if (it.isEmpty()) {
-                    recipesViewModel.getRecipes()
+            coroutineScope.launch {
+                recipesViewModel.recipes.collect {
+                    if (it.isEmpty()) {
+                        recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                    } else {
+                        binding.contentRecipesGroup.show()
+                    }
+                    recipesAdapter.submitList(it)
+                }
+            }
+
+            coroutineScope.launch {
+                filtersViewModel.fetchNewData.collect { hasToFetch ->
+                    if (hasToFetch) {
+                        recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                    }
                 }
             }
         }
+
     }
 
     private fun setUpListeners() {

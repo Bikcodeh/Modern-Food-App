@@ -13,15 +13,7 @@ class RemoteDataSource @Inject constructor(
     private val foodRecipeApi: FoodRecipeApi
 ) {
 
-    suspend fun getRecipes(mealType: String, dietType: String): Result<List<Recipe>> {
-        val queries = HashMap<String, String>()
-        queries["number"] = DEFAULT_RECIPES_TOTAL
-        queries["apiKey"] = BuildConfig.FOOD_KEY
-        queries["type"] = mealType
-        queries["diet"] = dietType
-        queries["addRecipeInformation"] = "true"
-        queries["fillIngredients"] = "true"
-
+    suspend fun getRecipes(queries: Map<String, String>): Result<List<Recipe>> {
         val result = makeSafeRequest { foodRecipeApi.getRecipes(queries) }
 
         return result.fold(
