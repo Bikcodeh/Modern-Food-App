@@ -31,4 +31,14 @@
     <string name="whole30">Whole30</string>
     <string name="diet_type">Diet Type</string>
     <string name="apply">Apply</string>
+    <string name="error_bad_request">Bad request</string>
+    <string name="unknown_error">Unknown error occurred.</string>
+    <string name="limited_points_error">Your daily points are over.</string>
+    <string name="unauthorized_error">Unauthorized user</string>
+    <string name="invalid_request_error">Invalid request happened</string>
+    <string name="not_found_error">Not found error happened</string>
+    <string name="internal_server_error">Ups! An internal server error occurred.</string>
+    <string name="service_unavailable_error">Ups! Service unavailable</string>
+    <string name="try_again">Try again</string>
+    <string name="connectivity_error">An error occurred while your request was executing.</string>
 </resources>

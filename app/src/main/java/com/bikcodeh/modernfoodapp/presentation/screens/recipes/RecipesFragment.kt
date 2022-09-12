@@ -3,11 +3,13 @@ package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
+import com.bikcodeh.modernfoodapp.presentation.screens.filter.FilterState
 import com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersViewModel
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
 import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
@@ -53,10 +55,13 @@ class RecipesFragment :
                         binding.recipesLoadingSv.hide()
                     }
 
-                    if (state.hasError) {
-                        binding.contentRecipesGroup.hide()
+                    state.error?.let {
                         binding.errorConnectionView.root.show()
-                    } else {
+                        it.errorMessage?.let { messageId ->
+                            binding.errorConnectionView.viewErrorTv.text = getString(messageId)
+                        }
+                        binding.errorConnectionView.viewErrorBtn.isVisible = it.displayTryAgainBtn
+                    } ?: run {
                         binding.errorConnectionView.root.hide()
                     }
                 }
@@ -74,9 +79,9 @@ class RecipesFragment :
             }
 
             coroutineScope.launch {
-                filtersViewModel.fetchNewData.collect { hasToFetch ->
-                    if (hasToFetch) {
-                        recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                filtersViewModel.fetchNewData.collect { filterState ->
+                    when (filterState) {
+                        FilterState.FetchData -> recipesViewModel.getRecipes(filtersViewModel.applyQueries())
                     }
                 }
             }
@@ -112,6 +117,10 @@ class RecipesFragment :
                     Toast.LENGTH_SHORT
                 ).show()
             }
+        }
+
+        binding.errorConnectionView.viewErrorBtn.setOnClickListener {
+            recipesViewModel.getRecipes(filtersViewModel.applyQueries())
         }
     }
 }

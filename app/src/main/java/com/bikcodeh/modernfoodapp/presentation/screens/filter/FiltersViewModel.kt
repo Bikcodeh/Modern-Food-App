@@ -9,9 +9,8 @@ import com.bikcodeh.modernfoodapp.util.Constants.DEFAULT_DIET_TYPE
 import com.bikcodeh.modernfoodapp.util.Constants.DEFAULT_MEAL_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,9 +22,9 @@ class FiltersViewModel @Inject constructor(
     private var mealType = DEFAULT_MEAL_TYPE
     private var dietType = DEFAULT_DIET_TYPE
 
-    private val _fetchNewData: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val fetchNewData: StateFlow<Boolean>
-        get() = _fetchNewData.asStateFlow()
+    private val _fetchNewData = Channel<FilterState>()
+    val fetchNewData: Flow<FilterState>
+        get() = _fetchNewData.receiveAsFlow()
 
 
     val filters = foodDataStoreOperations.readMealAndDietType
@@ -37,7 +36,9 @@ class FiltersViewModel @Inject constructor(
 
 
     fun setFetchNewData() {
-        _fetchNewData.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            _fetchNewData.send(FilterState.FetchData)
+        }
     }
 
     fun applyQueries(): HashMap<String, String> {

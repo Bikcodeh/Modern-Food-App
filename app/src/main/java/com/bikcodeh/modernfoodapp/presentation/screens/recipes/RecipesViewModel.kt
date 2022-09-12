@@ -2,11 +2,13 @@ package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.data.local.LocalDataSource
+import com.bikcodeh.modernfoodapp.domain.common.Error
 import com.bikcodeh.modernfoodapp.domain.common.fold
+import com.bikcodeh.modernfoodapp.domain.common.toError
+import com.bikcodeh.modernfoodapp.domain.common.validateHttpCodeErrorCode
 import com.bikcodeh.modernfoodapp.domain.repository.FoodRepository
-import com.bikcodeh.modernfoodapp.util.Constants.DEFAULT_DIET_TYPE
-import com.bikcodeh.modernfoodapp.util.Constants.DEFAULT_MEAL_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,19 +34,21 @@ class RecipesViewModel @Inject constructor(
     val recipes = localDataSource.getRecipes()
 
     fun getRecipes(queries: Map<String, String>) {
-        _recipesState.update { it.copy(isLoading = true, hasError = false) }
+        _recipesState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch(Dispatchers.IO) {
             foodRepository.getRecipes(queries)
                 .fold(
                     onSuccess = { recipes ->
                         localDataSource.insertRecipes(recipes.map { it.toEntity() })
-                        _recipesState.update { it.copy(isLoading = false, hasError = false) }
+                        _recipesState.update { it.copy(isLoading = false, error = null) }
                     },
-                    onError = { _, _ ->
-                        _recipesState.update { it.copy(isLoading = false, hasError = true) }
+                    onError = { errorCode, _ ->
+                        val error = handleError(errorCode.validateHttpCodeErrorCode())
+                        _recipesState.update { it.copy(isLoading = false, error = error) }
                     },
-                    onException = {
-                        _recipesState.update { it.copy(isLoading = false, hasError = true) }
+                    onException = { exception ->
+                        val error = handleError(exception.toError())
+                        _recipesState.update { it.copy(isLoading = false, error = error) }
                     }
                 )
         }
@@ -52,5 +56,22 @@ class RecipesViewModel @Inject constructor(
 
     fun setNavigateToFilter(canNavigate: Boolean) {
         canNavigateToFilter = canNavigate
+    }
+
+    private fun handleError(error: Error): RecipeError {
+        return when (error) {
+            Error.Connectivity -> RecipeError(
+                errorMessage = R.string.connectivity_error,
+                displayTryAgainBtn = true
+            )
+            is Error.HttpException -> RecipeError(
+                errorMessage = error.messageResId,
+                displayTryAgainBtn = true
+            )
+            is Error.Unknown -> RecipeError(
+                errorMessage = R.string.connectivity_error,
+                displayTryAgainBtn = false
+            )
+        }
     }
 }

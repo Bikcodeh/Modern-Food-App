@@ -5,7 +5,7 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/recipesFragment">
 
-    <fragment
+     <fragment
         android:id="@+id/recipesFragment"
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.recipes.RecipesFragment"
         android:label="fragment_recipes"
@@ -32,9 +32,5 @@
         android:id="@+id/filtersBottomSheetFragment"
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersBottomSheetFragment"
         android:label="fragment_filters_bottom_sheet"
-        tools:layout="@layout/fragment_filters_bottom_sheet" >
-        <action
-            android:id="@+id/action_filtersBottomSheetFragment_to_recipesFragment"
-            app:destination="@id/recipesFragment" />
-    </dialog>
+        tools:layout="@layout/fragment_filters_bottom_sheet" />
 </navigation>

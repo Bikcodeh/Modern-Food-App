@@ -101,11 +101,7 @@ class FiltersBottomSheetFragment : BottomSheetDialogFragment() {
                 dietTypeChipId
             )
             filtersViewModel.setFetchNewData()
-            val action =
-                FiltersBottomSheetFragmentDirections.actionFiltersBottomSheetFragmentToRecipesFragment(
-                    true
-                )
-            findNavController().navigate(action)
+            findNavController().popBackStack()
         }
     }
 
