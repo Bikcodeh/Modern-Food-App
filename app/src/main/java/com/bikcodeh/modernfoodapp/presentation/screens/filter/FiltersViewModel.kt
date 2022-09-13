@@ -60,4 +60,14 @@ class FiltersViewModel @Inject constructor(
 
         return queries
     }
+
+    fun applySearchQuery(searchQuery: String): HashMap<String, String> {
+        val queries: HashMap<String, String> = HashMap()
+        queries["query"] = searchQuery
+        queries["number"] = Constants.DEFAULT_RECIPES_TOTAL
+        queries["apiKey"] = BuildConfig.FOOD_KEY
+        queries["addRecipeInformation"] = "true"
+        queries["fillIngredients"] = "true"
+        return queries
+    }
 }

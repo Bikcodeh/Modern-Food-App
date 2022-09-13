@@ -1,25 +1,23 @@
 package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.MenuHost
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
+import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.bikcodeh.modernfoodapp.presentation.screens.filter.FilterState
 import com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersViewModel
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
 import com.bikcodeh.modernfoodapp.util.ConnectivityObserver
 import com.bikcodeh.modernfoodapp.util.extension.hide
+import com.bikcodeh.modernfoodapp.util.extension.hideKeyboard
 import com.bikcodeh.modernfoodapp.util.extension.observeFlows
 import com.bikcodeh.modernfoodapp.util.extension.show
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,11 +26,11 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipesFragment :
-    BaseFragmentBinding<FragmentRecipesBinding>(FragmentRecipesBinding::inflate), SearchView.OnQueryTextListener {
+    BaseFragmentBinding<FragmentRecipesBinding>(FragmentRecipesBinding::inflate) {
 
     private val recipesViewModel by viewModels<RecipesViewModel>()
     private val filtersViewModel by activityViewModels<FiltersViewModel>()
-    private val recipesAdapter by lazy { RecipesAdapter() }
+    private var recipesAdapter = RecipesAdapter()
 
     @Inject
     lateinit var connectivityObserver: ConnectivityObserver
@@ -42,19 +40,7 @@ class RecipesFragment :
         setUpViews()
         setUpListeners()
         setUpCollectors()
-    }
-
-    private fun setUpMenu(menuHost: MenuHost) {
-        menuHost.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.search_menu, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return true
-            }
-
-        }, viewLifecycleOwner)
+        recipesViewModel.getLocalRecipes()
     }
 
     private fun setUpViews() {
@@ -83,17 +69,19 @@ class RecipesFragment :
                     } ?: run {
                         binding.errorConnectionView.root.hide()
                     }
-                }
-            }
 
-            coroutineScope.launch {
-                recipesViewModel.recipes.collect {
-                    if (it.isEmpty()) {
-                        recipesViewModel.getRecipes(filtersViewModel.applyQueries())
-                    } else {
+                    state.searchedRecipes?.let {
+                        binding.contentRecipesGroup.show()
+                        clearDataAndSubmit(it)
+                    }
+
+                    state.recipes?.let {
+                        if (it.isEmpty()) {
+                            recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                        }
+                        clearDataAndSubmit(it)
                         binding.contentRecipesGroup.show()
                     }
-                    recipesAdapter.submitList(it)
                 }
             }
 
@@ -125,29 +113,54 @@ class RecipesFragment :
 
     }
 
+    private fun clearDataAndSubmit(recipes: List<Recipe>){
+        (binding.recipesRv.adapter as RecipesAdapter).apply {
+            submitList(null)
+            submitList(recipes)
+        }
+    }
+
     private fun setUpListeners() {
-        binding.recipesFab.setOnClickListener {
-            if (recipesViewModel.canNavigateToFilter) {
-                findNavController().navigate(R.id.action_recipesFragment_to_filtersBottomSheetFragment)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    R.string.no_internet_connection,
-                    Toast.LENGTH_SHORT
-                ).show()
+        with(binding) {
+            recipesFab.setOnClickListener {
+                if (recipesViewModel.canNavigateToFilter) {
+                    findNavController().navigate(R.id.action_recipesFragment_to_filtersBottomSheetFragment)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        R.string.no_internet_connection,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            errorConnectionView.viewErrorBtn.setOnClickListener {
+                recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+            }
+
+            searchRecipeEt.setOnEditorActionListener { textView, actionId, _ ->
+                val text = textView.text.toString()
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    if (text.trim().count() > 3) {
+                        hideKeyboard()
+                        recipesViewModel.searchRecipes(filtersViewModel.applySearchQuery(text))
+                    }
+                }
+                false
+            }
+
+            searchRecipeEt.doOnTextChanged { text, _, _, _ ->
+                clearTextIvBtn.isVisible = text?.trim()?.isNotEmpty() != false
+            }
+
+            clearTextIvBtn.setOnClickListener {
+                if (searchRecipeEt.text.toString().trim().isNotEmpty()) {
+                    recipesViewModel.clearSearchedRecipes()
+                    searchRecipeEt.setText(String())
+                } else {
+                    searchRecipeEt.clearFocus()
+                }
             }
         }
-
-        binding.errorConnectionView.viewErrorBtn.setOnClickListener {
-            recipesViewModel.getRecipes(filtersViewModel.applyQueries())
-        }
-    }
-
-    override fun onQueryTextSubmit(query: String?): Boolean {
-        return false
-    }
-
-    override fun onQueryTextChange(newText: String?): Boolean {
-        return true
     }
 }

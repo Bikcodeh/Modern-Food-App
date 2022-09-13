@@ -6,4 +6,5 @@ import com.bikcodeh.modernfoodapp.domain.model.Recipe
 interface FoodRepository {
 
     suspend fun getRecipes(queries: Map<String, String>): Result<List<Recipe>>
+    suspend fun searchRecipes(queries: Map<String, String>): Result<List<Recipe>>
 }

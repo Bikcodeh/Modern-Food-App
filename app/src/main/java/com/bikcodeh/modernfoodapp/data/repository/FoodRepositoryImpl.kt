@@ -17,4 +17,8 @@ class FoodRepositoryImpl @Inject constructor(
     override suspend fun getRecipes(queries: Map<String, String>): Result<List<Recipe>> {
         return remoteDataSource.getRecipes(queries)
     }
+
+    override suspend fun searchRecipes(queries: Map<String, String>): Result<List<Recipe>> {
+        return remoteDataSource.searchRecipes(queries)
+    }
 }

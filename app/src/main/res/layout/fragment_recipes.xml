@@ -6,6 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".presentation.screens.recipes.RecipesFragment">
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/searchCv"
+        style="?attr/materialCardViewFilledStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="16dp"
+        app:cardBackgroundColor="@null"
+        app:cardElevation="0dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/searchContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bg">
+
+            <EditText
+                android:id="@+id/searchRecipeEt"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:drawableStart="@drawable/ic_search"
+                android:drawablePadding="8dp"
+                android:hint="@string/search"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:maxLength="30"
+                android:maxLines="1"
+                android:textColorHint="@color/black"
+                android:textColor="@color/black"
+                android:imeOptions="actionSearch"
+                android:imeActionLabel="@string/search"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toStartOf="@+id/clearTextIvBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/clearTextIvBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:src="@drawable/ic_close"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/recipesFab"
         android:layout_width="wrap_content"
@@ -20,13 +72,13 @@
         android:id="@+id/recipesRv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchCv"
         tools:itemCount="3"
         tools:listitem="@layout/item_recipe" />
 
@@ -34,7 +86,8 @@
         android:id="@+id/recipesLoadingSv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/recipesShimmer"

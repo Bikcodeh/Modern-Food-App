@@ -31,7 +31,13 @@ class RecipesViewModel @Inject constructor(
     val recipesState: StateFlow<RecipesState>
         get() = _recipesState.asStateFlow()
 
-    val recipes = localDataSource.getRecipes()
+    fun getLocalRecipes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSource.getRecipes().collect { recipesData ->
+                _recipesState.update { it.copy(recipes = recipesData) }
+            }
+        }
+    }
 
     fun getRecipes(queries: Map<String, String>) {
         _recipesState.update { it.copy(isLoading = true, error = null) }
@@ -52,6 +58,37 @@ class RecipesViewModel @Inject constructor(
                     }
                 )
         }
+    }
+
+    fun searchRecipes(query: Map<String, String>) {
+        _recipesState.update { it.copy(isLoading = true, error = null, recipes = null) }
+        viewModelScope.launch(Dispatchers.IO) {
+            foodRepository.searchRecipes(query)
+                .fold(
+                    onSuccess = { recipes ->
+                        _recipesState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                searchedRecipes = recipes
+                            )
+                        }
+                    },
+                    onError = { errorCode, _ ->
+                        val error = handleError(errorCode.validateHttpCodeErrorCode())
+                        _recipesState.update { it.copy(isLoading = false, error = error) }
+                    },
+                    onException = { exception ->
+                        val error = handleError(exception.toError())
+                        _recipesState.update { it.copy(isLoading = false, error = error) }
+                    }
+                )
+        }
+    }
+
+    fun clearSearchedRecipes() {
+        _recipesState.update { it.copy(searchedRecipes = null) }
+        getLocalRecipes()
     }
 
     fun setNavigateToFilter(canNavigate: Boolean) {
