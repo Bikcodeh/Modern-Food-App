@@ -1,8 +1,14 @@
 package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -22,7 +28,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecipesFragment :
-    BaseFragmentBinding<FragmentRecipesBinding>(FragmentRecipesBinding::inflate) {
+    BaseFragmentBinding<FragmentRecipesBinding>(FragmentRecipesBinding::inflate), SearchView.OnQueryTextListener {
 
     private val recipesViewModel by viewModels<RecipesViewModel>()
     private val filtersViewModel by activityViewModels<FiltersViewModel>()
@@ -36,6 +42,19 @@ class RecipesFragment :
         setUpViews()
         setUpListeners()
         setUpCollectors()
+    }
+
+    private fun setUpMenu(menuHost: MenuHost) {
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.search_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+
+        }, viewLifecycleOwner)
     }
 
     private fun setUpViews() {
@@ -122,5 +141,13 @@ class RecipesFragment :
         binding.errorConnectionView.viewErrorBtn.setOnClickListener {
             recipesViewModel.getRecipes(filtersViewModel.applyQueries())
         }
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return true
     }
 }
