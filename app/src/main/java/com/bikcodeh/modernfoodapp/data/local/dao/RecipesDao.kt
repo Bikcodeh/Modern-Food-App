@@ -15,4 +15,7 @@ interface RecipesDao {
 
     @Query("SELECT * FROM recipes ORDER BY id ASC")
     fun getRecipes(): Flow<List<RecipeEntity>>
+
+    @Query("DELETE FROM recipes")
+    suspend fun clear()
 }

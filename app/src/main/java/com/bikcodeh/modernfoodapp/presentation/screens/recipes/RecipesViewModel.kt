@@ -45,16 +45,17 @@ class RecipesViewModel @Inject constructor(
             foodRepository.getRecipes(queries)
                 .fold(
                     onSuccess = { recipes ->
+                        localDataSource.clear()
                         localDataSource.insertRecipes(recipes.map { it.toEntity() })
                         _recipesState.update { it.copy(isLoading = false, error = null) }
                     },
                     onError = { errorCode, _ ->
                         val error = handleError(errorCode.validateHttpCodeErrorCode())
-                        _recipesState.update { it.copy(isLoading = false, error = error) }
+                        _recipesState.update { it.copy(isLoading = false, error = error, recipes = null) }
                     },
                     onException = { exception ->
                         val error = handleError(exception.toError())
-                        _recipesState.update { it.copy(isLoading = false, error = error) }
+                        _recipesState.update { it.copy(isLoading = false, error = error, recipes = null) }
                     }
                 )
         }

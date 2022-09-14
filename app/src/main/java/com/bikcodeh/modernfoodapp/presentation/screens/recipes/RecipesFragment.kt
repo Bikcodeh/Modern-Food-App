@@ -61,6 +61,7 @@ class RecipesFragment :
                     }
 
                     state.error?.let {
+                        binding.contentRecipesGroup.hide()
                         binding.errorConnectionView.root.show()
                         it.errorMessage?.let { messageId ->
                             binding.errorConnectionView.viewErrorTv.text = getString(messageId)
@@ -113,7 +114,7 @@ class RecipesFragment :
 
     }
 
-    private fun clearDataAndSubmit(recipes: List<Recipe>){
+    private fun clearDataAndSubmit(recipes: List<Recipe>) {
         (binding.recipesRv.adapter as RecipesAdapter).apply {
             submitList(null)
             submitList(recipes)

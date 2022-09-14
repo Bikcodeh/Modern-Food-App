@@ -17,4 +17,8 @@ class LocalDataSource @Inject constructor(
     suspend fun insertRecipes(recipeEntity: List<RecipeEntity>) {
         recipesDao.insertRecipes(recipeEntity)
     }
+
+    suspend fun clear() {
+        recipesDao.clear()
+    }
 }
