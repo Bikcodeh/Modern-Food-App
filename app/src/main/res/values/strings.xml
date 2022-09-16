@@ -42,4 +42,8 @@
     <string name="try_again">Try again</string>
     <string name="connectivity_error">An error occurred while your request was executing.</string>
     <string name="search">Search</string>
+    <string name="overview_tab_title">Overview</string>
+    <string name="instructions_tab_title">Instructions</string>
+    <string name="ingredients_tab_title">Ingredients</string>
+    <string name="detail_title">Detail</string>
 </resources>

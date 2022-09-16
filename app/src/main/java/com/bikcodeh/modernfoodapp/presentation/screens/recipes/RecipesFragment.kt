@@ -9,7 +9,6 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.bikcodeh.modernfoodapp.DetailFragmentArgs
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentRecipesBinding
 import com.bikcodeh.modernfoodapp.domain.model.Recipe
@@ -31,10 +30,7 @@ class RecipesFragment :
 
     private val recipesViewModel by viewModels<RecipesViewModel>()
     private val filtersViewModel by activityViewModels<FiltersViewModel>()
-    private var recipesAdapter = RecipesAdapter {
-        val action = RecipesFragmentDirections.actionRecipesFragmentToDetailFragment(it)
-        findNavController().navigate(action)
-    }
+    private var recipesAdapter = RecipesAdapter(::handleOnClick)
 
     @Inject
     lateinit var connectivityObserver: ConnectivityObserver
@@ -45,6 +41,11 @@ class RecipesFragment :
         setUpListeners()
         setUpCollectors()
         recipesViewModel.getLocalRecipes()
+    }
+
+    private fun handleOnClick(recipe: Recipe) {
+        val action = RecipesFragmentDirections.actionRecipesFragmentToDetailFragment(recipe)
+        findNavController().navigate(action)
     }
 
     private fun setUpViews() {

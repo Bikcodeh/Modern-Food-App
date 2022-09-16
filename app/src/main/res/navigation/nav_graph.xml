@@ -42,7 +42,7 @@
         tools:layout="@layout/fragment_filters_bottom_sheet" />
     <fragment
         android:id="@+id/detailFragment"
-        android:name="com.bikcodeh.modernfoodapp.DetailFragment"
+        android:name="com.bikcodeh.modernfoodapp.presentation.screens.detail.DetailFragment"
         android:label="detail"
         tools:layout="@layout/fragment_detail" >
         <argument

@@ -1,11 +1,12 @@
-package com.bikcodeh.modernfoodapp
+package com.bikcodeh.modernfoodapp.presentation.screens.detail.pages
 
 import android.os.Bundle
 import android.view.View
-import com.bikcodeh.modernfoodapp.databinding.FragmentDetailBinding
+import com.bikcodeh.modernfoodapp.databinding.FragmentIngredientsBinding
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
 
-class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetailBinding::inflate) {
+class IngredientsFragment :
+    BaseFragmentBinding<FragmentIngredientsBinding>(FragmentIngredientsBinding::inflate) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
