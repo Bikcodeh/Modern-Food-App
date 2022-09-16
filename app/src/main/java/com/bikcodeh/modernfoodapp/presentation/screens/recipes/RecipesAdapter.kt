@@ -11,7 +11,7 @@ import com.bikcodeh.modernfoodapp.presentation.util.BaseViewHolder
 import com.bikcodeh.modernfoodapp.util.extension.loadImageFromUrl
 import com.bikcodeh.modernfoodapp.util.extension.viewBinding
 
-class RecipesAdapter : BaseAdapter<Recipe, ItemRecipeBinding, RecipesAdapter.RecipesViewHolder>(
+class RecipesAdapter(val onClick: (recipe: Recipe) -> Unit) : BaseAdapter<Recipe, ItemRecipeBinding, RecipesAdapter.RecipesViewHolder>(
     areItemsTheSame = { oldItem, newItem -> oldItem.id == newItem.id },
     areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
 ) {
@@ -45,6 +45,7 @@ class RecipesAdapter : BaseAdapter<Recipe, ItemRecipeBinding, RecipesAdapter.Rec
                         )
                     )
                 }
+                root.setOnClickListener { onClick(item) }
             }
         }
     }

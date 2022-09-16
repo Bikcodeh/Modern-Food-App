@@ -17,7 +17,14 @@
             android:name="backFromBottomSheet"
             app:argType="boolean"
             android:defaultValue="false" />
-    </fragment>
+         <action
+             android:id="@+id/action_recipesFragment_to_detailFragment"
+             app:destination="@id/detailFragment"
+             app:enterAnim="@anim/nav_default_pop_enter_anim"
+             app:exitAnim="@anim/nav_default_exit_anim"
+             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+     </fragment>
     <fragment
         android:id="@+id/favoriteRecipesFragment"
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.favoriterecipes.FavoriteRecipesFragment"
@@ -33,4 +40,13 @@
         android:name="com.bikcodeh.modernfoodapp.presentation.screens.filter.FiltersBottomSheetFragment"
         android:label="fragment_filters_bottom_sheet"
         tools:layout="@layout/fragment_filters_bottom_sheet" />
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.bikcodeh.modernfoodapp.DetailFragment"
+        android:label="detail"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="recipe"
+            app:argType="com.bikcodeh.modernfoodapp.domain.model.Recipe" />
+    </fragment>
 </navigation>

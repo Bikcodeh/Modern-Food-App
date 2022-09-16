@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
         setUpBottomNavigation()
         setUpCollectors()
+        setUpListeners()
     }
 
     private fun setUpBottomNavigation() {
@@ -59,7 +60,9 @@ class MainActivity : AppCompatActivity() {
             if (v is EditText) {
                 val outRect = Rect()
                 v.getGlobalVisibleRect(outRect)
-                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt()) && v.text.toString().isEmpty()) {
+                if (!outRect.contains(event.rawX.toInt(), event.rawY.toInt()) && v.text.toString()
+                        .isEmpty()
+                ) {
                     v.clearFocus()
                     val imm: InputMethodManager =
                         getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -81,6 +84,15 @@ class MainActivity : AppCompatActivity() {
                         ConnectivityObserver.Status.Lost -> binding.noConnectionTv.show()
                     }
                 }
+            }
+        }
+    }
+
+    private fun setUpListeners() {
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.label) {
+                "detail" -> binding.bottomNavigation.hide()
+                else -> binding.bottomNavigation.show()
             }
         }
     }
