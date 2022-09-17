@@ -3,6 +3,7 @@ package com.bikcodeh.modernfoodapp.presentation.screens.detail
 import android.os.Bundle
 import android.view.View
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentDetailBinding
 import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.IngredientsFragment
@@ -16,6 +17,8 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
     private lateinit var adapter: DetailPagerAdapter
 
     private val tabTitles = mutableListOf<String>()
+
+    private val args by navArgs<DetailFragmentArgs>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,9 +36,9 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
     }
 
     private fun setUpAdapter() {
-        adapter.addFragment(OverviewFragment())
-        adapter.addFragment(IngredientsFragment())
-        adapter.addFragment(InstructionsFragment())
+        adapter.addFragment(OverviewFragment(), args.recipe)
+        adapter.addFragment(IngredientsFragment(), args.recipe)
+        adapter.addFragment(InstructionsFragment(), args.recipe)
     }
 
     private fun setUpViewPager() {
