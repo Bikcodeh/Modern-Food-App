@@ -46,4 +46,7 @@
     <string name="instructions_tab_title">Instructions</string>
     <string name="ingredients_tab_title">Ingredients</string>
     <string name="detail_title">Detail</string>
+    <string name="cheap">Cheap</string>
+    <string name="healthy">Healthy</string>
+    <string name="dairy_free">Dairy Free</string>
 </resources>

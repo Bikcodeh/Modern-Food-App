@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/drawable/gradient_overlay.xml" value="0.351" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/drawable/ic_checkmark.xml" value="0.351" />
+        <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/drawable/ic_clock.xml" value="0.352" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/drawable/ic_eco.xml" value="0.352" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/drawable/ic_search.xml" value="0.352" />
         <entry key="..\:/Users/victo/AndroidStudioProjects/ModernFoodApp/app/src/main/res/drawable/search_bg.xml" value="0.352" />
