@@ -1,6 +1,7 @@
 package com.bikcodeh.modernfoodapp.data.local
 
 import com.bikcodeh.modernfoodapp.data.local.dao.RecipesDao
+import com.bikcodeh.modernfoodapp.data.local.entity.FavoriteRecipeEntity
 import com.bikcodeh.modernfoodapp.data.local.entity.RecipeEntity
 import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
@@ -20,5 +21,21 @@ class LocalDataSource @Inject constructor(
 
     suspend fun clear() {
         recipesDao.clear()
+    }
+
+    suspend fun insertFavorite(favoriteRecipeEntity: FavoriteRecipeEntity) {
+        recipesDao.insertFavoriteRecipe(favoriteRecipeEntity)
+    }
+
+    fun getAllFavorite(): Flow<List<FavoriteRecipeEntity>> {
+        return recipesDao.getAllFavorites()
+    }
+
+    suspend fun deleteFavorite(favoriteRecipeEntity: FavoriteRecipeEntity) {
+        recipesDao.deleteFavorite(favoriteRecipeEntity)
+    }
+
+    suspend fun clearFavorites() {
+        recipesDao.clearFavorites()
     }
 }
