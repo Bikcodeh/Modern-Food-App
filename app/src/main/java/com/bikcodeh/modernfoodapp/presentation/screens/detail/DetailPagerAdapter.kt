@@ -12,10 +12,6 @@ class DetailPagerAdapter(
 
     private val fragments = mutableListOf<Fragment>()
 
-    companion object {
-        const val NUM_PAGES = 3
-    }
-
     fun addFragment(fragment: Fragment) {
         fragments.add(fragment)
     }
