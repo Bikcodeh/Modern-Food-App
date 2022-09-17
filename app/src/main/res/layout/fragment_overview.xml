@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.screens.detail.pages.OverviewFragment">
+    tools:context=".presentation.screens.detail.pages.overview.OverviewFragment">
 
     <ImageView
         android:id="@+id/main_imageView"
@@ -238,7 +238,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                tools:text="TextView" />
+                tools:text="@tools:sample/lorem/random" />
 
         </LinearLayout>
     </ScrollView>

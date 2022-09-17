@@ -1,4 +1,4 @@
-package com.bikcodeh.modernfoodapp.presentation.screens.detail.pages
+package com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.overview
 
 import android.os.Bundle
 import android.view.View

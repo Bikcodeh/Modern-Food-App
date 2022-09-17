@@ -6,9 +6,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentDetailBinding
-import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.IngredientsFragment
-import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.InstructionsFragment
-import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.OverviewFragment
+import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.ingredients.IngredientsFragment
+import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.instructions.InstructionsFragment
+import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.overview.OverviewFragment
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
