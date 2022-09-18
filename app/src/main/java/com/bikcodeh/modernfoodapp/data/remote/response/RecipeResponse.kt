@@ -50,6 +50,7 @@ data class RecipeResponse(
         title,
         vegan,
         vegetarian,
-        veryHealthy
+        veryHealthy,
+        false
     )
 }

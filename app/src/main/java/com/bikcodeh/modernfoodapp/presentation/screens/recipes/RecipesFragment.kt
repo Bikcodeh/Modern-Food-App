@@ -83,7 +83,10 @@ class RecipesFragment :
 
                     state.recipes?.let {
                         if (it.isEmpty()) {
-                            recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                            recipesViewModel.getRecipes(
+                                filtersViewModel.applyQueries(),
+                                initialFlow = true
+                            )
                         }
                         clearDataAndSubmit(it)
                         binding.contentRecipesGroup.show()
@@ -94,7 +97,10 @@ class RecipesFragment :
             coroutineScope.launch {
                 filtersViewModel.fetchNewData.collect { filterState ->
                     when (filterState) {
-                        FilterState.FetchData -> recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                        FilterState.FetchData -> recipesViewModel.getRecipes(
+                            filtersViewModel.applyQueries(),
+                            initialFlow = false
+                        )
                     }
                 }
             }
@@ -141,7 +147,7 @@ class RecipesFragment :
             }
 
             errorConnectionView.viewErrorBtn.setOnClickListener {
-                recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+                recipesViewModel.getRecipes(filtersViewModel.applyQueries(), initialFlow = false)
             }
 
             searchRecipeEt.setOnEditorActionListener { textView, actionId, _ ->

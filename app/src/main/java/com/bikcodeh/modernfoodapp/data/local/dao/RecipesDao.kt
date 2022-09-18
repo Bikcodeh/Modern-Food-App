@@ -1,7 +1,9 @@
 package com.bikcodeh.modernfoodapp.data.local.dao
 
-import androidx.room.*
-import com.bikcodeh.modernfoodapp.data.local.entity.FavoriteRecipeEntity
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import com.bikcodeh.modernfoodapp.data.local.entity.RecipeEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -17,15 +19,9 @@ interface RecipesDao {
     @Query("DELETE FROM recipes")
     suspend fun clear()
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavoriteRecipe(favoriteRecipeEntity: FavoriteRecipeEntity)
+    @Query("SELECT * FROM recipes WHERE isFavorite = 1 ORDER BY id ASC")
+    fun getAllFavorites(): Flow<List<RecipeEntity>>
 
-    @Query("SELECT * FROM favorite_recipe ORDER BY id ASC")
-    fun getAllFavorites(): Flow<List<FavoriteRecipeEntity>>
-
-    @Delete
-    suspend fun deleteFavorite(favoriteRecipeEntity: FavoriteRecipeEntity)
-
-    @Query("DELETE FROM favorite_recipe")
-    suspend fun clearFavorites()
+    @Query("UPDATE recipes SET isFavorite = :isFavorite WHERE id = :recipeId")
+    suspend fun setFavorite(recipeId: Int, isFavorite: Boolean)
 }

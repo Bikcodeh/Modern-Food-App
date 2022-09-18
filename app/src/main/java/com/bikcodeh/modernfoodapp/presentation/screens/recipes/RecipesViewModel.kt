@@ -11,10 +11,7 @@ import com.bikcodeh.modernfoodapp.domain.common.validateHttpCodeErrorCode
 import com.bikcodeh.modernfoodapp.domain.repository.FoodRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,6 +28,9 @@ class RecipesViewModel @Inject constructor(
     val recipesState: StateFlow<RecipesState>
         get() = _recipesState.asStateFlow()
 
+    val favoriteRecipes =
+        localDataSource.getAllFavorite().map { it.map { item -> item.toDomain() } }
+
     fun getLocalRecipes() {
         viewModelScope.launch(Dispatchers.IO) {
             localDataSource.getRecipes().collect { recipesData ->
@@ -39,23 +39,34 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
-    fun getRecipes(queries: Map<String, String>) {
+    fun getRecipes(queries: Map<String, String>, initialFlow: Boolean) {
         _recipesState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch(Dispatchers.IO) {
             foodRepository.getRecipes(queries)
                 .fold(
                     onSuccess = { recipes ->
-                        localDataSource.clear()
-                        localDataSource.insertRecipes(recipes.map { it.toEntity() })
+                        if (initialFlow) localDataSource.insertRecipes(recipes.map { it.toEntity() })
                         _recipesState.update { it.copy(isLoading = false, error = null) }
                     },
                     onError = { errorCode, _ ->
                         val error = handleError(errorCode.validateHttpCodeErrorCode())
-                        _recipesState.update { it.copy(isLoading = false, error = error, recipes = null) }
+                        _recipesState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = error,
+                                recipes = null
+                            )
+                        }
                     },
                     onException = { exception ->
                         val error = handleError(exception.toError())
-                        _recipesState.update { it.copy(isLoading = false, error = error, recipes = null) }
+                        _recipesState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = error,
+                                recipes = null
+                            )
+                        }
                     }
                 )
         }
@@ -94,6 +105,12 @@ class RecipesViewModel @Inject constructor(
 
     fun setNavigateToFilter(canNavigate: Boolean) {
         canNavigateToFilter = canNavigate
+    }
+
+    fun setAsFavorite(isFavorite: Boolean, recipeId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSource.setFavorite(recipeId, isFavorite)
+        }
     }
 
     private fun handleError(error: Error): RecipeError {
