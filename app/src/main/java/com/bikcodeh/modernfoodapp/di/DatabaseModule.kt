@@ -22,7 +22,7 @@ object DatabaseModule {
             context,
             RecipesDatabase::class.java,
             RecipesDatabase.DB_NAME
-        ).build()
+        ).createFromAsset("database/recipes.db").build()
 
     @Singleton
     @Provides
