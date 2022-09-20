@@ -39,14 +39,20 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
-    fun getRecipes(queries: Map<String, String>, initialFlow: Boolean) {
+    fun getRecipes(queries: Map<String, String>) {
         _recipesState.update { it.copy(isLoading = true, error = null) }
         viewModelScope.launch(Dispatchers.IO) {
             foodRepository.getRecipes(queries)
                 .fold(
                     onSuccess = { recipes ->
-                        if (initialFlow) localDataSource.insertRecipes(recipes.map { it.toEntity() })
-                        _recipesState.update { it.copy(isLoading = false, error = null) }
+                        localDataSource.insertRecipes(recipes.map { it.toEntity() })
+                        _recipesState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = null,
+                                recipes = recipes
+                            )
+                        }
                     },
                     onError = { errorCode, _ ->
                         val error = handleError(errorCode.validateHttpCodeErrorCode())

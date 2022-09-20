@@ -1,7 +1,9 @@
 package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -35,12 +37,16 @@ class RecipesFragment :
     @Inject
     lateinit var connectivityObserver: ConnectivityObserver
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        recipesViewModel.getRecipes(filtersViewModel.applyQueries())
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpViews()
         setUpListeners()
         setUpCollectors()
-        recipesViewModel.getLocalRecipes()
     }
 
     private fun handleOnClick(recipe: Recipe) {
@@ -82,12 +88,6 @@ class RecipesFragment :
                     }
 
                     state.recipes?.let {
-                        if (it.isEmpty()) {
-                            recipesViewModel.getRecipes(
-                                filtersViewModel.applyQueries(),
-                                initialFlow = true
-                            )
-                        }
                         clearDataAndSubmit(it)
                         binding.contentRecipesGroup.show()
                     }
@@ -98,8 +98,7 @@ class RecipesFragment :
                 filtersViewModel.fetchNewData.collect { filterState ->
                     when (filterState) {
                         FilterState.FetchData -> recipesViewModel.getRecipes(
-                            filtersViewModel.applyQueries(),
-                            initialFlow = false
+                            filtersViewModel.applyQueries()
                         )
                     }
                 }
@@ -147,7 +146,7 @@ class RecipesFragment :
             }
 
             errorConnectionView.viewErrorBtn.setOnClickListener {
-                recipesViewModel.getRecipes(filtersViewModel.applyQueries(), initialFlow = false)
+                recipesViewModel.getRecipes(filtersViewModel.applyQueries())
             }
 
             searchRecipeEt.setOnEditorActionListener { textView, actionId, _ ->
