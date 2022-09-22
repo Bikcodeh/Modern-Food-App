@@ -34,7 +34,7 @@ class RecipesViewModel @Inject constructor(
     fun getLocalRecipes() {
         viewModelScope.launch(Dispatchers.IO) {
             localDataSource.getRecipes().collect { recipesData ->
-                _recipesState.update { it.copy(recipes = recipesData) }
+                _recipesState.update { it.copy(recipes = recipesData, error = null) }
             }
         }
     }
@@ -132,6 +132,10 @@ class RecipesViewModel @Inject constructor(
             is Error.Unknown -> RecipeError(
                 errorMessage = R.string.connectivity_error,
                 displayTryAgainBtn = false
+            )
+            Error.LimitApi -> RecipeError(
+                errorMessage = R.string.limited_points_error,
+                isLimitError = true
             )
         }
     }

@@ -49,4 +49,6 @@
     <string name="cheap">Cheap</string>
     <string name="healthy">Healthy</string>
     <string name="dairy_free">Dairy Free</string>
+    <string name="limit_points_description">Your daily points were consumed, please try again later. At the moment you can search other recipes saved locally.</string>
+    <string name="ok_option">Okay</string>
 </resources>

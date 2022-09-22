@@ -13,4 +13,5 @@ data class RecipesState(
 data class RecipeError(
     val displayTryAgainBtn: Boolean = false,
     @StringRes val errorMessage: Int? = null,
+    val isLimitError: Boolean = false
 )

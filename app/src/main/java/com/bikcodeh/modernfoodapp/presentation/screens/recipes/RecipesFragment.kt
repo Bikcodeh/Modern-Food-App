@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
@@ -22,6 +23,7 @@ import com.bikcodeh.modernfoodapp.util.extension.hide
 import com.bikcodeh.modernfoodapp.util.extension.hideKeyboard
 import com.bikcodeh.modernfoodapp.util.extension.observeFlows
 import com.bikcodeh.modernfoodapp.util.extension.show
+import com.google.android.material.button.MaterialButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -72,12 +74,17 @@ class RecipesFragment :
                     }
 
                     state.error?.let {
-                        binding.contentRecipesGroup.hide()
-                        binding.errorConnectionView.root.show()
-                        it.errorMessage?.let { messageId ->
-                            binding.errorConnectionView.viewErrorTv.text = getString(messageId)
+
+                        if (it.isLimitError) {
+                            displayDialog()
+                        } else {
+                            binding.contentRecipesGroup.hide()
+                            binding.errorConnectionView.root.show()
+                            it.errorMessage?.let { messageId ->
+                                binding.errorConnectionView.viewErrorTv.text = getString(messageId)
+                            }
+                            binding.errorConnectionView.viewErrorBtn.isVisible = it.displayTryAgainBtn
                         }
-                        binding.errorConnectionView.viewErrorBtn.isVisible = it.displayTryAgainBtn
                     } ?: run {
                         binding.errorConnectionView.root.hide()
                     }
@@ -173,5 +180,18 @@ class RecipesFragment :
                 }
             }
         }
+    }
+
+    private fun displayDialog() {
+        val builder = AlertDialog.Builder(requireContext()).create()
+        val view = layoutInflater.inflate(R.layout.dialog_limit_points_error, null)
+        view.findViewById<MaterialButton>(R.id.limitPointsBtn).setOnClickListener {
+            recipesViewModel.getLocalRecipes()
+            builder.dismiss()
+        }
+        builder.setView(view)
+        builder.setCanceledOnTouchOutside(false)
+        builder.setCancelable(false)
+        builder.show()
     }
 }

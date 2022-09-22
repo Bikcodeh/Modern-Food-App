@@ -10,6 +10,7 @@ sealed class Error {
     object Connectivity : Error()
     data class Unknown(val message: String) : Error()
     class HttpException(@StringRes val messageResId: Int): Error()
+    object LimitApi: Error()
 }
 
 fun Exception.toError(): Error = when (this) {
