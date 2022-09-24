@@ -22,8 +22,6 @@ interface FoodRecipeApi {
 
     @GET("recipes/{recipeId}/information")
     suspend fun searchRecipeById(
-        @Query("addRecipeInformation") recipeInformation: String = "true",
-        @Query("fillIngredients") fillIngredients: String = "true",
         @Query("apiKey") key: String = BuildConfig.FOOD_KEY,
         @Path("recipeId") recipeId: Int
     ): Response<FoodResponse>
