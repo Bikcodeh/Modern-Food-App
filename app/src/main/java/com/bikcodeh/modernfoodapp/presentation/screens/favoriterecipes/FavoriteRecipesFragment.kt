@@ -9,7 +9,9 @@ import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.bikcodeh.modernfoodapp.presentation.screens.recipes.RecipesAdapter
 import com.bikcodeh.modernfoodapp.presentation.screens.recipes.RecipesViewModel
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
+import com.bikcodeh.modernfoodapp.util.extension.hide
 import com.bikcodeh.modernfoodapp.util.extension.observeFlows
+import com.bikcodeh.modernfoodapp.util.extension.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -40,6 +42,13 @@ class FavoriteRecipesFragment :
             coroutineScope.launch {
                 recipesViewModel.favoriteRecipes.collect {
                     recipesAdapter.submitList(it)
+                    if (it.isNotEmpty()) {
+                        binding.emptyFavoritesView.root.hide()
+                        binding.favoriteRv.show()
+                    } else {
+                        binding.emptyFavoritesView.root.show()
+                        binding.favoriteRv.hide()
+                    }
                 }
             }
         }
