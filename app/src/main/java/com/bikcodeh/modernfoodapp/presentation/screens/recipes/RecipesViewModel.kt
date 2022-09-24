@@ -9,6 +9,7 @@ import com.bikcodeh.modernfoodapp.domain.common.fold
 import com.bikcodeh.modernfoodapp.domain.common.toError
 import com.bikcodeh.modernfoodapp.domain.common.validateHttpCodeErrorCode
 import com.bikcodeh.modernfoodapp.domain.repository.FoodRepository
+import com.bikcodeh.modernfoodapp.presentation.screens.detail.DetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -27,6 +28,10 @@ class RecipesViewModel @Inject constructor(
     private val _recipesState: MutableStateFlow<RecipesState> = MutableStateFlow(RecipesState())
     val recipesState: StateFlow<RecipesState>
         get() = _recipesState.asStateFlow()
+
+    private val _recipeDetail: MutableStateFlow<DetailState> = MutableStateFlow(DetailState.Idle)
+    val recipeDetail: StateFlow<DetailState>
+        get() = _recipeDetail.asStateFlow()
 
     val favoriteRecipes =
         localDataSource.getAllFavorite().map { it.map { item -> item.toDomain() } }
@@ -116,6 +121,13 @@ class RecipesViewModel @Inject constructor(
     fun setAsFavorite(isFavorite: Boolean, recipeId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             localDataSource.setFavorite(recipeId, isFavorite)
+        }
+    }
+
+    fun getRecipeById(recipeId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val recipe = localDataSource.getRecipeById(recipeId).toDomain()
+            _recipeDetail.value = DetailState.Success(recipe)
         }
     }
 

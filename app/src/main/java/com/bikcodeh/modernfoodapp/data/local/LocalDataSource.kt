@@ -29,4 +29,8 @@ class LocalDataSource @Inject constructor(
     suspend fun setFavorite(recipeId: Int, isFavorite: Boolean) {
         recipesDao.setFavorite(recipeId, isFavorite)
     }
+
+    suspend fun getRecipeById(recipeId: Int): RecipeEntity {
+        return recipesDao.getRecipeById(recipeId)
+    }
 }

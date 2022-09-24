@@ -24,4 +24,7 @@ interface RecipesDao {
 
     @Query("UPDATE recipes SET isFavorite = :isFavorite WHERE id = :recipeId")
     suspend fun setFavorite(recipeId: Int, isFavorite: Boolean)
+
+    @Query("SELECT * FROM recipes WHERE id = :recipeId")
+    suspend fun getRecipeById(recipeId: Int): RecipeEntity
 }

@@ -7,13 +7,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bikcodeh.modernfoodapp.R
 import com.bikcodeh.modernfoodapp.databinding.FragmentDetailBinding
+import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.ingredients.IngredientsFragment
 import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.instructions.InstructionsFragment
 import com.bikcodeh.modernfoodapp.presentation.screens.detail.pages.overview.OverviewFragment
 import com.bikcodeh.modernfoodapp.presentation.screens.recipes.RecipesViewModel
 import com.bikcodeh.modernfoodapp.presentation.util.BaseFragmentBinding
+import com.bikcodeh.modernfoodapp.util.extension.observeFlows
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetailBinding::inflate) {
@@ -31,19 +34,16 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         adapter = DetailPagerAdapter(parentFragmentManager, viewLifecycleOwner.lifecycle)
-        setUpTabTitles()
-        setUpAdapter()
-        setUpViewPager()
-        setUpListeners()
-        setUpFavorite()
+        setUpCollectors()
+        recipesViewModel.getRecipeById(args.recipe.id)
     }
 
-    private fun setUpFavorite() {
-        if (args.recipe.isFavorite) binding.favoriteIcon.progress = 0.5f
-        checked = args.recipe.isFavorite
+    private fun setUpFavorite(recipe: Recipe) {
+        if (recipe.isFavorite) binding.favoriteIcon.progress = 0.5f
+        checked = recipe.isFavorite
     }
 
-    private fun setUpListeners() {
+    private fun setUpListeners(recipeId: Int) {
 
         with(binding) {
             detailBack.setOnClickListener {
@@ -60,15 +60,38 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
                     favoriteIcon.playAnimation()
                     true
                 }
-                recipesViewModel.setAsFavorite(checked, args.recipe.id)
+                recipesViewModel.setAsFavorite(checked, recipeId)
             }
         }
     }
 
-    private fun setUpAdapter() {
-        adapter.addFragment(OverviewFragment(), args.recipe)
-        adapter.addFragment(IngredientsFragment(), args.recipe)
-        adapter.addFragment(InstructionsFragment(), args.recipe)
+    private fun setUpCollectors() {
+        observeFlows { coroutineScope ->
+            coroutineScope.launch {
+                recipesViewModel.recipeDetail.collect { state ->
+                    when (state) {
+                        DetailState.Idle -> {}
+                        is DetailState.Success -> {
+                            state.recipe?.let { recipe ->
+                                setUpFavorite(recipe)
+                                setUpListeners(recipe.id)
+                                setUpAdapter(recipe)
+                                setUpTabTitles()
+                                setUpViewPager()
+                            } ?: run {
+                                findNavController().popBackStack()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setUpAdapter(recipe: Recipe) {
+        adapter.addFragment(OverviewFragment(), recipe)
+        adapter.addFragment(IngredientsFragment(), recipe)
+        adapter.addFragment(InstructionsFragment(), recipe)
     }
 
     private fun setUpViewPager() {
