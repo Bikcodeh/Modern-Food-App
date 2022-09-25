@@ -17,9 +17,6 @@ interface RecipesDao {
     @Query("SELECT * FROM recipes ORDER BY id ASC")
     fun getRecipes(): Flow<List<RecipeEntity>>
 
-    @Query("DELETE FROM recipes")
-    suspend fun clear()
-
     @Query("SELECT * FROM recipes WHERE isFavorite = 1 ORDER BY id ASC")
     fun getAllFavorites(): Flow<List<RecipeEntity>>
 
@@ -31,4 +28,7 @@ interface RecipesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipe(recipeEntity: RecipeEntity)
+
+    @Query("SELECT * FROM recipes WHERE diet LIKE :dietType AND type LIKE :type")
+    suspend fun searchRecipes(dietType: String, type: String): List<RecipeEntity>
 }

@@ -23,7 +23,9 @@ class RecipeEntity(
     val vegan: Boolean,
     val vegetarian: Boolean,
     val veryHealthy: Boolean,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val diet: List<String>,
+    val type: List<String>
 ) {
     fun toDomain(): Recipe = Recipe(
         aggregateLikes,
@@ -41,6 +43,8 @@ class RecipeEntity(
         vegan,
         vegetarian,
         veryHealthy,
-        isFavorite
+        isFavorite,
+        diet,
+        type
     )
 }

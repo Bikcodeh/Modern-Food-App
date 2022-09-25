@@ -33,7 +33,11 @@ data class RecipeResponse(
     @SerializedName("vegetarian")
     val vegetarian: Boolean,
     @SerializedName("veryHealthy")
-    val veryHealthy: Boolean
+    val veryHealthy: Boolean,
+    @SerializedName("diets")
+    val diet: List<String>,
+    @SerializedName("dishTypes")
+    val type: List<String>
 ) {
     fun toDomain(): Recipe = Recipe(
         aggregateLikes,
@@ -51,6 +55,8 @@ data class RecipeResponse(
         vegan,
         vegetarian,
         veryHealthy,
-        false
+        false,
+        diet,
+        type
     )
 }

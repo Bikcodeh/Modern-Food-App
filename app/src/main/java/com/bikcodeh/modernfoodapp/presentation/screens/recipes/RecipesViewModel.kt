@@ -84,6 +84,20 @@ class RecipesViewModel @Inject constructor(
         }
     }
 
+    fun searchLocal(query: Map<String, String>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val recipesSearched = localDataSource.searchRecipes(
+                dietType = query["diet"] ?: "",
+                type = query["type"] ?: ""
+            )
+            if (recipesSearched.isNotEmpty()) {
+                _recipesState.update { it.copy(recipes = recipesSearched.map { recipeEntity -> recipeEntity.toDomain() }) }
+            } else {
+                getRecipes(query)
+            }
+        }
+    }
+
     fun searchRecipes(query: Map<String, String>) {
         _recipesState.update { it.copy(isLoading = true, error = null, recipes = null) }
         viewModelScope.launch(Dispatchers.IO) {

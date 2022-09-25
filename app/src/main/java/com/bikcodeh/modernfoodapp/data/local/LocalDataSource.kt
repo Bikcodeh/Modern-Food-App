@@ -18,10 +18,6 @@ class LocalDataSource @Inject constructor(
         recipesDao.insertRecipes(recipeEntity)
     }
 
-    suspend fun clear() {
-        recipesDao.clear()
-    }
-
     fun getAllFavorite(): Flow<List<RecipeEntity>> {
         return recipesDao.getAllFavorites()
     }
@@ -36,5 +32,9 @@ class LocalDataSource @Inject constructor(
 
     suspend fun insertRecipe(recipeEntity: RecipeEntity) {
         recipesDao.insertRecipe(recipeEntity)
+    }
+
+    suspend fun searchRecipes(dietType: String, type: String): List<RecipeEntity> {
+        return recipesDao.searchRecipes("%$dietType%", "%$type%")
     }
 }

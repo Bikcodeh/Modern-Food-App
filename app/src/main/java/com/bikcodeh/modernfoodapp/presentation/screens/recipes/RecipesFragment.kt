@@ -1,9 +1,7 @@
 package com.bikcodeh.modernfoodapp.presentation.screens.recipes
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -83,7 +81,8 @@ class RecipesFragment :
                             it.errorMessage?.let { messageId ->
                                 binding.errorConnectionView.viewErrorTv.text = getString(messageId)
                             }
-                            binding.errorConnectionView.viewErrorBtn.isVisible = it.displayTryAgainBtn
+                            binding.errorConnectionView.viewErrorBtn.isVisible =
+                                it.displayTryAgainBtn
                         }
                     } ?: run {
                         binding.errorConnectionView.root.hide()
@@ -104,9 +103,7 @@ class RecipesFragment :
             coroutineScope.launch {
                 filtersViewModel.fetchNewData.collect { filterState ->
                     when (filterState) {
-                        FilterState.FetchData -> recipesViewModel.getRecipes(
-                            filtersViewModel.applyQueries()
-                        )
+                        FilterState.FetchData -> recipesViewModel.searchLocal(filtersViewModel.applyQueries())
                     }
                 }
             }
