@@ -51,6 +51,7 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
             }
 
             favoriteIcon.setOnClickListener {
+                recipesViewModel.insertRecipe(args.recipe)
                 checked = if (checked) {
                     favoriteIcon.setMinAndMaxProgress(0.5f, 1.0f)
                     favoriteIcon.playAnimation()
@@ -73,19 +74,23 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
                         DetailState.Idle -> {}
                         is DetailState.Success -> {
                             state.recipe?.let { recipe ->
-                                setUpFavorite(recipe)
-                                setUpListeners(recipe.id)
-                                setUpAdapter(recipe)
-                                setUpTabTitles()
-                                setUpViewPager()
+                                setUpFlow(recipe)
                             } ?: run {
-                                findNavController().popBackStack()
+                                setUpFlow(args.recipe)
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun setUpFlow(recipe: Recipe) {
+        setUpFavorite(recipe)
+        setUpListeners(recipe.id)
+        setUpAdapter(recipe)
+        setUpTabTitles()
+        setUpViewPager()
     }
 
     private fun setUpAdapter(recipe: Recipe) {
@@ -108,5 +113,4 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
         tabTitles.add(getString(R.string.ingredients_tab_title))
         tabTitles.add(getString(R.string.instructions_tab_title))
     }
-
 }

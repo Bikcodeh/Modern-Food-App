@@ -8,6 +8,7 @@ import com.bikcodeh.modernfoodapp.domain.common.Error
 import com.bikcodeh.modernfoodapp.domain.common.fold
 import com.bikcodeh.modernfoodapp.domain.common.toError
 import com.bikcodeh.modernfoodapp.domain.common.validateHttpCodeErrorCode
+import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.bikcodeh.modernfoodapp.domain.repository.FoodRepository
 import com.bikcodeh.modernfoodapp.presentation.screens.detail.DetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -126,8 +127,18 @@ class RecipesViewModel @Inject constructor(
 
     fun getRecipeById(recipeId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            val recipe = localDataSource.getRecipeById(recipeId).toDomain()
-            _recipeDetail.value = DetailState.Success(recipe)
+            val recipe = localDataSource.getRecipeById(recipeId)
+            recipe?.let {
+                _recipeDetail.value = DetailState.Success(it.toDomain())
+            } ?: run {
+                _recipeDetail.value = DetailState.Success(null)
+            }
+        }
+    }
+
+    fun insertRecipe(recipe: Recipe) {
+        viewModelScope.launch(Dispatchers.IO) {
+            localDataSource.insertRecipe(recipe.toEntity())
         }
     }
 

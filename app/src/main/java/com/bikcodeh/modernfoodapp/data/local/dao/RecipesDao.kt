@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.bikcodeh.modernfoodapp.data.local.entity.RecipeEntity
+import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -26,5 +27,8 @@ interface RecipesDao {
     suspend fun setFavorite(recipeId: Int, isFavorite: Boolean)
 
     @Query("SELECT * FROM recipes WHERE id = :recipeId")
-    suspend fun getRecipeById(recipeId: Int): RecipeEntity
+    suspend fun getRecipeById(recipeId: Int): RecipeEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecipe(recipeEntity: RecipeEntity)
 }

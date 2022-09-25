@@ -30,7 +30,11 @@ class LocalDataSource @Inject constructor(
         recipesDao.setFavorite(recipeId, isFavorite)
     }
 
-    suspend fun getRecipeById(recipeId: Int): RecipeEntity {
+    suspend fun getRecipeById(recipeId: Int): RecipeEntity? {
         return recipesDao.getRecipeById(recipeId)
+    }
+
+    suspend fun insertRecipe(recipeEntity: RecipeEntity) {
+        recipesDao.insertRecipe(recipeEntity)
     }
 }
