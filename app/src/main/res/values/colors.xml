@@ -12,6 +12,9 @@
     <color name="yellow">#FFC114</color>
     <color name="green">#00C980</color>
     <color name="strokeColor">@color/lightMediumGray</color>
+    <color name="strokeColorSelected">#6200ee</color>
     <color name="cardBackgroundColor">@color/white</color>
     <color name="titleColor">@color/darker</color>
+    <color name="cardBackgroundLightColor">#106200EA</color>
+    <color name="primary">#AEA6CE</color>
 </resources>

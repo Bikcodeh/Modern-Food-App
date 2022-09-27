@@ -6,12 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".presentation.screens.favoriterecipes.FavoriteRecipesFragment">
 
+    <include
+        android:id="@+id/layoutSelectItems"
+        layout="@layout/view_select_items"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/favoriteRv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favoriteRv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/layoutSelectItems"
         tools:itemCount="4"
         tools:listitem="@layout/item_recipe" />
 

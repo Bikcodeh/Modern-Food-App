@@ -23,7 +23,8 @@ data class Recipe(
     val veryHealthy: Boolean,
     val isFavorite: Boolean,
     val diet: List<String>,
-    val type: List<String>
+    val type: List<String>,
+    var isSelected: Boolean = false
 ): Parcelable {
     fun toEntity(): RecipeEntity = RecipeEntity(
         id,
