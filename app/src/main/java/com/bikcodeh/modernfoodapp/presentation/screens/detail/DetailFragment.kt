@@ -51,8 +51,8 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
             }
 
             favoriteIcon.setOnClickListener {
-                recipesViewModel.insertRecipe(args.recipe)
                 checked = if (checked) {
+                    recipesViewModel.insertRecipe(args.recipe)
                     favoriteIcon.setMinAndMaxProgress(0.5f, 1.0f)
                     favoriteIcon.playAnimation()
                     false

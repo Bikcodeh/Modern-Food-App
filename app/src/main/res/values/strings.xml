@@ -52,4 +52,8 @@
     <string name="limit_points_description">Your daily points were consumed, please try again later. At the moment you can search other recipes saved locally.</string>
     <string name="ok_option">Okay</string>
     <string name="empty_message">Ups! There\'s nothing here yet.</string>
+    <plurals name="total_selected">
+        <item quantity="one">%1$d item selected</item>
+        <item quantity="other">%1$d items selected</item>
+    </plurals>
 </resources>
