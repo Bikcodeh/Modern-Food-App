@@ -67,6 +67,7 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
                         )
                     )
                 }
+                applySelectedStyle(item)
             }
             setListeners(item)
         }
@@ -86,7 +87,7 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
             binding.root.setOnLongClickListener {
                 recipe.isSelected = !recipe.isSelected
                 if (!_isEditingItem) {
-                    setEsEditing(!_isEditingItem)
+                    setEsEditing(true)
                 }
                 checkSomeItemSelected()
                 applySelectedStyle(recipe)
@@ -120,13 +121,13 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
     }
 
     fun desSelect() {
+        currentList.mapIndexed { index, recipe ->
+            if (recipe.isSelected) {
+                recipe.isSelected = false
+                notifyItemChanged(index)
+            }
+        }
         setEsEditing(false)
-        currentList.asSequence().filter {
-            it.isSelected
-        }.mapIndexed { index, recipe ->
-            recipe.isSelected = false
-            notifyItemChanged(index)
-        }.toList()
     }
 
     private fun setEsEditing(editing: Boolean) {
