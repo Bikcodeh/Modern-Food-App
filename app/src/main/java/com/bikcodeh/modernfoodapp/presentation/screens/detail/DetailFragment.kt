@@ -35,6 +35,9 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
         super.onViewCreated(view, savedInstanceState)
         adapter = DetailPagerAdapter(parentFragmentManager, viewLifecycleOwner.lifecycle)
         setUpCollectors()
+        setUpTabTitles()
+        setUpAdapter(args.recipe)
+        setUpViewPager()
         recipesViewModel.getRecipeById(args.recipe.id)
     }
 
@@ -88,9 +91,6 @@ class DetailFragment : BaseFragmentBinding<FragmentDetailBinding>(FragmentDetail
     private fun setUpFlow(recipe: Recipe) {
         setUpFavorite(recipe)
         setUpListeners(recipe.id)
-        setUpAdapter(recipe)
-        setUpTabTitles()
-        setUpViewPager()
     }
 
     private fun setUpAdapter(recipe: Recipe) {

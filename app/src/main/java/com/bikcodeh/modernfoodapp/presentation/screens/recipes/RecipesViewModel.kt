@@ -25,6 +25,8 @@ class RecipesViewModel @Inject constructor(
 
     var canNavigateToFilter: Boolean = true
         private set
+    var _isEditing: Boolean = false
+        private set
 
     private val _recipesState: MutableStateFlow<RecipesState> = MutableStateFlow(RecipesState())
     val recipesState: StateFlow<RecipesState>
@@ -36,6 +38,10 @@ class RecipesViewModel @Inject constructor(
 
     val favoriteRecipes =
         localDataSource.getAllFavorite().map { it.map { item -> item.toDomain() } }
+
+    fun setIsEditing(isEditing: Boolean) {
+        _isEditing = isEditing
+    }
 
     fun getLocalRecipes() {
         viewModelScope.launch(Dispatchers.IO) {

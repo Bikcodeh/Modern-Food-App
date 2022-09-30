@@ -2,6 +2,7 @@ package com.bikcodeh.modernfoodapp.presentation.screens.favoriterecipes
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bikcodeh.modernfoodapp.R
@@ -22,6 +23,18 @@ class FavoriteRecipesFragment :
     private val recipesViewModel by viewModels<RecipesViewModel>()
     private var recipesAdapter = FavoritesAdapter(::handleOnClick)
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activity?.onBackPressedDispatcher?.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (recipesViewModel._isEditing) {
+                    recipesAdapter.desSelect()
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        })
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,7 +55,9 @@ class FavoriteRecipesFragment :
         observeFlows { coroutineScope ->
             coroutineScope.launch {
                 recipesViewModel.favoriteRecipes.collect {
-                    recipesAdapter.submitList(it)
+                    if (!recipesViewModel._isEditing) {
+                        recipesAdapter.submitList(it)
+                    }
                     if (it.isNotEmpty()) {
                         binding.emptyFavoritesView.root.hide()
                         binding.favoriteRv.show()
@@ -55,6 +70,7 @@ class FavoriteRecipesFragment :
 
             coroutineScope.launch {
                 recipesAdapter.isEditing.collect { isEditing ->
+                    recipesViewModel.setIsEditing(isEditing)
                     if (isEditing) {
                         binding.layoutSelectItems.root.show()
                     } else {
@@ -72,6 +88,11 @@ class FavoriteRecipesFragment :
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recipesViewModel.setIsEditing(false)
     }
 
     private fun setListeners() {

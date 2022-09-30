@@ -87,7 +87,7 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
             binding.root.setOnLongClickListener {
                 recipe.isSelected = !recipe.isSelected
                 if (!_isEditingItem) {
-                    setIsEditing(true)
+                    setIsEditing(!_isEditingItem)
                 }
                 checkSomeItemSelected()
                 applySelectedStyle(recipe)
