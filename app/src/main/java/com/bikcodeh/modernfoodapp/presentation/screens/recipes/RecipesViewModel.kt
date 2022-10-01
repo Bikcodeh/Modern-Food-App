@@ -11,6 +11,7 @@ import com.bikcodeh.modernfoodapp.domain.common.validateHttpCodeErrorCode
 import com.bikcodeh.modernfoodapp.domain.model.Recipe
 import com.bikcodeh.modernfoodapp.domain.repository.FoodRepository
 import com.bikcodeh.modernfoodapp.presentation.screens.detail.DetailState
+import com.bikcodeh.modernfoodapp.presentation.util.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -21,7 +22,7 @@ import javax.inject.Inject
 class RecipesViewModel @Inject constructor(
     private val foodRepository: FoodRepository,
     private val localDataSource: LocalDataSource
-) : ViewModel() {
+) : BaseViewModel() {
 
     var canNavigateToFilter: Boolean = true
         private set
@@ -159,27 +160,6 @@ class RecipesViewModel @Inject constructor(
     fun insertRecipe(recipe: Recipe) {
         viewModelScope.launch(Dispatchers.IO) {
             localDataSource.insertRecipe(recipe.toEntity())
-        }
-    }
-
-    private fun handleError(error: Error): RecipeError {
-        return when (error) {
-            Error.Connectivity -> RecipeError(
-                errorMessage = R.string.connectivity_error,
-                displayTryAgainBtn = true
-            )
-            is Error.HttpException -> RecipeError(
-                errorMessage = error.messageResId,
-                displayTryAgainBtn = true
-            )
-            is Error.Unknown -> RecipeError(
-                errorMessage = R.string.connectivity_error,
-                displayTryAgainBtn = false
-            )
-            Error.LimitApi -> RecipeError(
-                errorMessage = R.string.limited_points_error,
-                isLimitError = true
-            )
         }
     }
 }

@@ -3,6 +3,7 @@ package com.bikcodeh.modernfoodapp.di
 import android.content.Context
 import androidx.room.Room
 import com.bikcodeh.modernfoodapp.data.local.RecipesDatabase
+import com.bikcodeh.modernfoodapp.data.local.dao.FoodJokeDao
 import com.bikcodeh.modernfoodapp.data.local.dao.RecipesDao
 import dagger.Module
 import dagger.Provides
@@ -28,4 +29,9 @@ object DatabaseModule {
     @Provides
     fun providesRecipeDao(recipesDatabase: RecipesDatabase): RecipesDao =
         recipesDatabase.recipesDao()
+
+    @Singleton
+    @Provides
+    fun providesFoodJokeDao(recipesDatabase: RecipesDatabase): FoodJokeDao =
+        recipesDatabase.foodJokeDao()
 }
