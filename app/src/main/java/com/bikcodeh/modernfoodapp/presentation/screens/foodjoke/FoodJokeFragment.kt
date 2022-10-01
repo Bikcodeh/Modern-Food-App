@@ -1,5 +1,6 @@
 package com.bikcodeh.modernfoodapp.presentation.screens.foodjoke
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
@@ -38,6 +39,7 @@ class FoodJokeFragment :
                                 handleEmptyFoodJoke(state.error?.errorMessage)
                             } else {
                                 foodJokeTv.text = it
+                                foodJokeViewModel.setJoke(it)
                             }
                         }
                         state.error?.let {
@@ -54,6 +56,16 @@ class FoodJokeFragment :
     private fun setUpListeners() {
         binding.errorConnectionView.viewErrorBtn.setOnClickListener {
             foodJokeViewModel.getRemoteFoodJoke()
+        }
+
+        binding.foodJokeShare.setOnClickListener {
+            Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, foodJokeViewModel.foodJoke)
+                type = "text/plain"
+            }.also {
+                startActivity(it)
+            }
         }
     }
 

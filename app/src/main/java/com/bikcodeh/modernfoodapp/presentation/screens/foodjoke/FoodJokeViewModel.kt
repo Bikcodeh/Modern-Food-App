@@ -27,6 +27,13 @@ class FoodJokeViewModel @Inject constructor(
     val foodJokeState: StateFlow<FoodJokeState>
         get() = _foodJokeState.asStateFlow()
 
+    var foodJoke: String = ""
+        private set
+
+    fun setJoke(joke: String) {
+        foodJoke = joke
+    }
+
     fun getLocalFoodJokes() {
         viewModelScope.launch(Dispatchers.IO) {
             val jokes = withContext(Dispatchers.IO) {
