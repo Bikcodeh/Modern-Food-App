@@ -9,8 +9,8 @@ import java.net.UnknownHostException
 sealed class Error {
     object Connectivity : Error()
     data class Unknown(val message: String) : Error()
-    class HttpException(@StringRes val messageResId: Int): Error()
-    object LimitApi: Error()
+    class HttpException(@StringRes val messageResId: Int) : Error()
+    object LimitApi : Error()
 }
 
 fun Exception.toError(): Error = when (this) {
@@ -26,15 +26,18 @@ fun Int.validateHttpCodeErrorCode(): Error {
 
 object HttpErrors {
     fun handleError(errorCode: Int): Error {
-        val errorResId = when (errorCode) {
-            503 -> R.string.service_unavailable_error
-            500 -> R.string.internal_server_error
-            404 -> R.string.not_found_error
-            400 -> R.string.invalid_request_error
-            401 -> R.string.unauthorized_error
-            402 -> R.string.limited_points_error
-            else -> R.string.unknown_error
+        return if (errorCode == 402) {
+            Error.LimitApi
+        } else {
+            val errorResId = when (errorCode) {
+                503 -> R.string.service_unavailable_error
+                500 -> R.string.internal_server_error
+                404 -> R.string.not_found_error
+                400 -> R.string.invalid_request_error
+                401 -> R.string.unauthorized_error
+                else -> R.string.unknown_error
+            }
+            Error.HttpException(messageResId = errorResId)
         }
-        return Error.HttpException(messageResId = errorResId)
     }
 }

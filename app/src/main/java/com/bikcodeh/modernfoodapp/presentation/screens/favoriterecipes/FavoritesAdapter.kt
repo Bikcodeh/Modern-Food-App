@@ -13,9 +13,6 @@ import com.bikcodeh.modernfoodapp.util.extension.viewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
@@ -25,15 +22,13 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
         areContentsTheSame = { oldItem, newItem -> oldItem == newItem }
     ) {
 
-    private val _isSelectedSomeItem = Channel<Boolean>(Channel.UNLIMITED)
-    val isSelectedSomeItem = _isSelectedSomeItem.receiveAsFlow()
-
     private val _isEditing = Channel<Boolean>(Channel.UNLIMITED)
     val isEditing = _isEditing.receiveAsFlow()
+
     private var _isEditingItem: Boolean = false
-    private val _totalSelected: MutableStateFlow<Int> = MutableStateFlow(0)
-    val totalSelected: StateFlow<Int>
-        get() = _totalSelected.asStateFlow()
+
+    private val _totalSelected: Channel<Int> = Channel(Channel.UNLIMITED)
+    val totalSelected = _totalSelected.receiveAsFlow()
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -69,29 +64,35 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
                 }
                 applySelectedStyle(item)
             }
-            setListeners(item)
+            setListeners()
         }
 
-        private fun setListeners(recipe: Recipe) {
+        private fun setListeners() {
             binding.root.setOnClickListener {
                 if (_isEditingItem) {
-                    recipe.isSelected = !recipe.isSelected
-                    applySelectedStyle(recipe)
+                    currentList[adapterPosition].isSelected = !currentList[adapterPosition].isSelected
+                    val total = getTotalSelected()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        _totalSelected.send(total)
+                    }
+                    applySelectedStyle(currentList[adapterPosition])
                     checkSomeItemSelected()
-                    _totalSelected.value = getTotalSelected()
                 } else {
-                    onClick(recipe)
+                    onClick(currentList[adapterPosition])
                 }
             }
 
             binding.root.setOnLongClickListener {
-                recipe.isSelected = !recipe.isSelected
+                currentList[adapterPosition].isSelected = !currentList[adapterPosition].isSelected
                 if (!_isEditingItem) {
-                    setIsEditing(!_isEditingItem)
+                    setIsEditing(true)
+                }
+                applySelectedStyle(currentList[adapterPosition])
+                val total = getTotalSelected()
+                CoroutineScope(Dispatchers.IO).launch {
+                    _totalSelected.send(total)
                 }
                 checkSomeItemSelected()
-                applySelectedStyle(recipe)
-                _totalSelected.value = getTotalSelected()
                 true
             }
         }
@@ -111,14 +112,19 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
     }
 
     private fun checkSomeItemSelected() {
-        currentList.any { it.isSelected }.also { someSelected ->
-            if (!someSelected) setIsEditing(false)
+        currentList.count { it.isSelected }.also {
+            if (it == 0) {
+                setIsEditing(false)
+            }
         }
+
     }
 
     fun getTotalSelected(): Int {
         return currentList.count { it.isSelected }
     }
+
+    fun getRecipeSelected(): List<Recipe> = currentList.filter { it.isSelected }
 
     fun desSelect() {
         currentList.mapIndexed { index, recipe ->
@@ -130,7 +136,7 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
         setIsEditing(false)
     }
 
-    private fun setIsEditing(editing: Boolean) {
+    fun setIsEditing(editing: Boolean) {
         _isEditingItem = editing
         CoroutineScope(Dispatchers.IO).launch {
             _isEditing.send(editing)

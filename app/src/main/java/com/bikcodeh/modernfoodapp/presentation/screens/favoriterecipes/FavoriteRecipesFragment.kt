@@ -55,9 +55,7 @@ class FavoriteRecipesFragment :
         observeFlows { coroutineScope ->
             coroutineScope.launch {
                 recipesViewModel.favoriteRecipes.collect {
-                    if (!recipesViewModel._isEditing) {
-                        recipesAdapter.submitList(it)
-                    }
+                    recipesAdapter.submitList(it)
                     if (it.isNotEmpty()) {
                         binding.emptyFavoritesView.root.hide()
                         binding.favoriteRv.show()
@@ -82,6 +80,7 @@ class FavoriteRecipesFragment :
             coroutineScope.launch {
                 recipesAdapter.totalSelected.collect {
                     if (it >= 1) {
+                        binding.layoutSelectItems.root.show()
                         binding.layoutSelectItems.itemSelectedTv.text =
                             resources.getQuantityString(R.plurals.total_selected, it, it)
                     }
@@ -98,6 +97,13 @@ class FavoriteRecipesFragment :
     private fun setListeners() {
         binding.layoutSelectItems.closeMenuIb.setOnClickListener {
             recipesAdapter.desSelect()
+        }
+
+        binding.layoutSelectItems.deleteMenuIb.setOnClickListener {
+            recipesAdapter.getRecipeSelected().forEach { recipe ->
+                recipesViewModel.setAsFavorite(false, recipe.id)
+            }
+            recipesAdapter.setIsEditing(false)
         }
     }
 }
