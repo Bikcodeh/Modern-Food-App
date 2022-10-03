@@ -83,6 +83,8 @@ dependencies {
     implementation "com.jakewharton.timber:timber:5.0.1"
     //Lottie animation
     implementation "com.airbnb.android:lottie:5.2.0"
+    //Splash
+    implementation 'androidx.core:core-splashscreen:1.0.0'
 
     testImplementation "junit:junit:4.13.2"
     androidTestImplementation "androidx.test.ext:junit:1.1.3"
