@@ -106,7 +106,7 @@ class FavoritesAdapter(val onClick: (recipe: Recipe) -> Unit) :
                 backgroundColor = ContextCompat.getColor(binding.root.context, R.color.primary)
             }
             binding.recipeContainerCv.strokeColor = strokeColor
-            binding.recipeContainerCv.setBackgroundColor(backgroundColor)
+            binding.itemRecipeContainerCnl.setBackgroundColor(backgroundColor)
         }
     }
 
