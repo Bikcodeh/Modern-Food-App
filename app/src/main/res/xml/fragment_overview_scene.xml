@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <Transition
+        motion:constraintSetEnd="@+id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="1000">
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="0"
+                motion:framePosition="100"
+                motion:motionTarget="@+id/main_imageView" />
+        </KeyFrameSet>
+        <OnSwipe
+            motion:touchAnchorId="@+id/main_imageView"
+            motion:touchAnchorSide="bottom" />
+    </Transition>
+
+    <ConstraintSet android:id="@+id/start" />
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/main_imageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent" />
+        <Constraint
+            android:id="@+id/gradient_overlay"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:alpha="0"
+            motion:layout_constraintBottom_toBottomOf="@+id/main_imageView"
+            motion:layout_constraintEnd_toEndOf="@+id/main_imageView"
+            motion:layout_constraintStart_toStartOf="@+id/main_imageView"
+            motion:layout_constraintTop_toTopOf="@+id/main_imageView"
+            motion:layout_constraintVertical_bias="1.0" />
+    </ConstraintSet>
+</MotionScene>
