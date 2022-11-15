@@ -1,5 +1,6 @@
 package com.bikcodeh.modernfoodapp.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,7 +16,7 @@ interface RecipesDao {
     suspend fun insertRecipes(recipes: List<RecipeEntity>)
 
     @Query("SELECT * FROM recipes ORDER BY id ASC")
-    fun getRecipes(): Flow<List<RecipeEntity>>
+    fun getRecipes(): PagingSource<Int, RecipeEntity>
 
     @Query("SELECT * FROM recipes WHERE isFavorite = 1")
     fun getAllFavorites(): Flow<List<RecipeEntity>>
@@ -31,4 +32,7 @@ interface RecipesDao {
 
     @Query("SELECT * FROM recipes WHERE diet LIKE :dietType AND type LIKE :type")
     suspend fun searchRecipes(dietType: String, type: String): List<RecipeEntity>
+
+    @Query("DELETE FROM recipes")
+    suspend fun clear()
 }
