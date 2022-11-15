@@ -2,7 +2,7 @@ package com.bikcodeh.modernfoodapp.util
 
 object Constants {
 
-    const val DEFAULT_RECIPES_TOTAL = "50"
+    const val DEFAULT_RECIPES_TOTAL = "10"
     const val DEFAULT_MEAL_TYPE = "main course"
     const val DEFAULT_DIET_TYPE = "gluten free"
     const val PREFERENCES_NAME = "foody_preferences"

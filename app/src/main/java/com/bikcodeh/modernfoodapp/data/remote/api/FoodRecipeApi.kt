@@ -12,12 +12,14 @@ interface FoodRecipeApi {
 
     @GET("recipes/complexSearch")
     suspend fun getRecipes(
-        @QueryMap queries: Map<String, String>
+        @QueryMap queries: Map<String, String>,
+        @Query("offset") offset: Int = 0
     ): Response<FoodResponse>
 
     @GET("recipes/complexSearch")
     suspend fun searchRecipes(
-        @QueryMap query: Map<String, String>
+        @QueryMap query: Map<String, String>,
+        @Query("offset") offset: Int = 0
     ): Response<FoodResponse>
 
     @GET("food/jokes/random")

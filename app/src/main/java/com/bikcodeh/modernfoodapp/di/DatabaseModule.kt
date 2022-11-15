@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.bikcodeh.modernfoodapp.data.local.RecipesDatabase
 import com.bikcodeh.modernfoodapp.data.local.dao.FoodJokeDao
 import com.bikcodeh.modernfoodapp.data.local.dao.RecipesDao
+import com.bikcodeh.modernfoodapp.data.local.dao.RemoteKeysDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,4 +35,9 @@ object DatabaseModule {
     @Provides
     fun providesFoodJokeDao(recipesDatabase: RecipesDatabase): FoodJokeDao =
         recipesDatabase.foodJokeDao()
+
+    @Singleton
+    @Provides
+    fun providesRemoteKeysDao(recipesDatabase: RecipesDatabase): RemoteKeysDao =
+        recipesDatabase.remoteKeysDao()
 }
